@@ -8,7 +8,6 @@ ___Instruction___
 4.Declare a clear pull request, Example: "<NEWFEATURES> has updated" or "rebuild a new code". (Just tell the changes, not the reason)
 5.Update your change in README (as a log), infrom your new code and the changes that you had made for what reason. Example, " <NAME> had changed to <name> as <NAME> had been declared in <SOMEONE> part.
 6.If you find other's code have issues, leave a comment in inform it in WhatsApp Group.
-7.I'm here Nianxin
 
 ___BASIC REQUIREMENT___
 ---Registration and Login---
