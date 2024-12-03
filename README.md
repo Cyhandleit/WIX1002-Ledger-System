@@ -13,31 +13,32 @@ ___BASIC REQUIREMENT___
 ---Registration and Login---
 1.
 
----Record Debit and Record Credit---
+# Record Debit and Record Credit
 1.
 
----Savings---
+# Savings
 1.
 
----View Account Balance---
+# View Account Balance
 1.
 
----View Transaction History---
+# View Transaction History
 1.
 
----Logout---
+# Logout
 1.
 
----Credit Loan---
+# Credit Loan
 1.
 
----Deposit Interest Predictor---
+# Deposit Interest Predictor
 1.
 
----Data Storage---
-1.
+# Data Storage
+1. Database cloud server had already been made, but still need to try for others
+2. The database haven't declared for the variable inside
 
----Comment Area---
+# Comment Area
 Example. GitHub issue (solved)
 1. The function of CSV and DataBase
 
