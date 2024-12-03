@@ -1,14 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
  package ledger_system;
- import java.util.Scanner;
- /**
-  *
-  * @author User
-  */
  
+ import java.util.Scanner;
+
  public class Main {
      static Scanner s = new Scanner(System.in);
  
