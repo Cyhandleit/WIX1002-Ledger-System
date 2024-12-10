@@ -1,10 +1,12 @@
+
 import java.util.Scanner;
 
 public class main {
-    static Scanner s = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
 
+        String input;
         int choice;
         while (true) {
             System.out.println("\nLogin or Register :");
@@ -12,11 +14,22 @@ public class main {
             System.out.println("2. Register");
             System.out.println();
 
-            choice = s.nextInt();
+            input = sc.next();
+
+            try {
+               choice = Integer.parseInt(input);
+           }
+           catch (NumberFormatException e){
+               choice = 6;
+           }
+
+            sc.nextLine();
 
             switch (choice) {
                 case 1:
-                    loginPage();
+                    if(loginPage()){
+                       bank.main(args);
+                    }
 
                     break;
 
@@ -39,10 +52,10 @@ public class main {
 
         System.out.println("\n== Please enter your email and password == ");
         System.out.print("email : ");
-        input_email = s.next();
+        input_email = sc.next();
         
         System.out.print("password : ");
-        input_pass = s.next();
+        input_pass = sc.next();
 
         if (!data.email.equals(input_email) || !data.pass.equals(input_pass)){
             System.out.println("Username or password is incorrect!");
@@ -60,18 +73,17 @@ public class main {
 
         System.out.println("\n== Please fill in the form ==");
         System.out.print("username : ");
-        data.name = s.next();
+        data.name = sc.next();
 
         System.out.print("email : ");
-        data.email = s.next();
+        data.email = sc.next();
 
         System.out.print("password : ");
-        data.pass = s.next();
+        data.pass = sc.next();
 
 
         System.out.println("\nRegister Successful!");
 
     }
-
 }
 
