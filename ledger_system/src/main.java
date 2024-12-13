@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class main {
-    static Scanner s = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -39,10 +39,10 @@ public class main {
 
         System.out.println("\n== Please enter your email and password == ");
         System.out.print("email : ");
-        input_email = s.next();
+        input_email = sc.nextLine();
         
         System.out.print("password : ");
-        input_pass = s.next();
+        input_pass = sc.nextLine();
 
         if (!data.email.equals(input_email) || !data.pass.equals(input_pass)){
             System.out.println("Username or password is incorrect!");
@@ -60,13 +60,13 @@ public class main {
 
         System.out.println("\n== Please fill in the form ==");
         System.out.print("username : ");
-        data.name = s.next();
+        data.name = sc.nextLine();
 
         System.out.print("email : ");
-        data.email = s.next();
+        data.email = sc.nextLine();
 
         System.out.print("password : ");
-        data.pass = s.next();
+        data.pass = sc.nextLine();
 
 
         System.out.println("\nRegister Successful!");
