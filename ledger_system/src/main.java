@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
 public class main {
@@ -55,7 +54,7 @@ public class main {
         input_email = sc.next();
         
         System.out.print("password : ");
-        input_pass = sc.next();
+        input_pass = sc.nextLine();
 
         if (!data.email.equals(input_email) || !data.pass.equals(input_pass)){
             System.out.println("Username or password is incorrect!");
@@ -76,10 +75,10 @@ public class main {
         data.name = sc.next();
 
         System.out.print("email : ");
-        data.email = sc.next();
+        data.email = sc.nextLine();
 
         System.out.print("password : ");
-        data.pass = sc.next();
+        data.pass = sc.nextLine();
 
 
         System.out.println("\nRegister Successful!");
