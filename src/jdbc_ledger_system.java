@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
         public static void main(String[] args) {
             // Database connection parameters
-            String url = "jdbc:mysql://localhost:3306/myDB";
+            String url = "jdbc:mysql://localhost:3306/mydb";
             String username = "root";
             String password = "cyh051205";
     
@@ -19,9 +19,9 @@ import java.sql.SQLException;
                  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
     
                 // Set the parameters for the SQL query
-                preparedStatement.setInt(1, 3);  // id
-                preparedStatement.setString(2, "XXX");  // name
-                preparedStatement.setDouble(3, 50.00);  // salary
+                preparedStatement.setInt(1, 6);  // id
+                preparedStatement.setString(2, "defg");  // name
+                preparedStatement.setDouble(3, 20205.00);  // salary
     
                 // Execute the insert query
                 int rowsAffected = preparedStatement.executeUpdate();
