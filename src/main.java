@@ -6,7 +6,7 @@ public class main {
     public static void main(String[] args) {
 
         String input;
-        int choicSe;
+        int choice;
         while (true) {
             System.out.println("\nLogin or Register :");
             System.out.println("1. Login");
