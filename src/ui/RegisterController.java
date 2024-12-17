@@ -44,6 +44,7 @@ public class RegisterController {
 
             MenuController menuController = loader.getController();
             menuController.displayName(username,email,password);
+            System.out.println("Register Succesfully!");
 
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
