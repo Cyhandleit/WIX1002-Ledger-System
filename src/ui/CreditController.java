@@ -35,7 +35,7 @@ public class CreditController {
             try (PreparedStatement transactionStmt = connection.prepareStatement(
                     "INSERT INTO transactions (user_id, amount, description) VALUES (?, ?, ?)")) {
                 transactionStmt.setInt(1, userId);
-                transactionStmt.setDouble(2, -credit); // Subtract the credit amount
+                transactionStmt.setDouble(2, credit); // Add the credit amount
                 transactionStmt.setString(3, desc);
                 transactionStmt.executeUpdate();
             }

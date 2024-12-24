@@ -96,6 +96,9 @@ public class MenuController implements Initializable {
             } else if (page.equals("SavingsPage")) {
                 SavingsController savingsController = loader.getController();
                 savingsController.setUserId(userId);
+            } else if (page.equals("HistoryPage")) {
+                HistoryController historyController = loader.getController();
+                historyController.setUserId(userId);
             }
 
         } catch (IOException e) {

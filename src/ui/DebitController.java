@@ -39,9 +39,21 @@ public class DebitController {
             double debit = Double.parseDouble(DebitAmount.getText());
             String desc = DescTextField.getText();
 
+            // Ensure savingsController is not null
+            if (savingsController == null) {
+                System.err.println("SavingsController is not initialized.");
+                return;
+            }
+
             // Calculate the savings amount
-            double savingsAmount = debit * (savingsController.getSavingsPercentage() / 100);
+            double savingsPercentage = savingsController.getSavingsPercentage();
+            double savingsAmount = debit * (savingsPercentage / 100);
             double debitAmountAfterSavings = debit - savingsAmount;
+
+            System.out.println("Debit amount: " + debit);
+            System.out.println("Savings percentage: " + savingsPercentage);
+            System.out.println("Savings amount: " + savingsAmount);
+            System.out.println("Debit amount after savings: " + debitAmountAfterSavings);
 
             // Insert the transaction into the database
             try (Connection connection = ledgerDB.getConnection()) {
@@ -51,7 +63,7 @@ public class DebitController {
                 try (PreparedStatement transactionStmt = connection.prepareStatement(
                         "INSERT INTO transactions (user_id, amount, description) VALUES (?, ?, ?)")) {
                     transactionStmt.setInt(1, userId);
-                    transactionStmt.setDouble(2, debitAmountAfterSavings);
+                    transactionStmt.setDouble(2, -debitAmountAfterSavings); // Record as negative amount
                     transactionStmt.setString(3, desc);
                     transactionStmt.executeUpdate();
                 }
@@ -68,32 +80,15 @@ public class DebitController {
 
                 System.out.println("Transaction saved successfully!");
 
-                // Reload account details
-                reloadAccountDetails(event);
-
             } catch (SQLException e) {
                 System.err.println("Database error: " + e.getMessage());
                 e.printStackTrace();
             }
 
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid debit amount: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
-
-    private void reloadAccountDetails(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AccountPage.fxml"));
-            Parent root = loader.load();
-            AccountController accountController = loader.getController();
-            accountController.setUserId(userId);
-            accountController.loadAccountDetails();
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
