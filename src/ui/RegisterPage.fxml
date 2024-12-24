@@ -13,13 +13,13 @@
             <Font size="40.0" />
          </font>
       </Text>
+      <TextField fx:id="nameTextField" layoutX="225.0" layoutY="170.0" onAction="#MenuPage" promptText="Enter Username" />
       <Button layoutX="36.0" layoutY="45.0" mnemonicParsing="false" onAction="#switchToCoverPage" text="Back" />
-      <TextField fx:id="nameTextField" layoutX="225.0" layoutY="170.0" onAction="#MenuPage" />
       <Button fx:id="RegisterButton" layoutX="270.0" layoutY="318.0" mnemonicParsing="false" onAction="#MenuPage" text="Register" />
-      <Text layoutX="160.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name       :" />
+      <Text layoutX="160.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" />
       <Text layoutX="160.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email        :" />
       <Text layoutX="161.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password :" />
-      <TextField fx:id="emailTextField" layoutX="226.0" layoutY="214.0" onAction="#MenuPage" />
-      <TextField fx:id="passwordTextField" layoutX="226.0" layoutY="254.0" onAction="#MenuPage" />
+      <TextField fx:id="emailTextField" layoutX="226.0" layoutY="214.0" onAction="#MenuPage" promptText="Enter Email" />
+      <TextField fx:id="passwordTextField" layoutX="226.0" layoutY="254.0" onAction="#MenuPage" promptText="Enter Password" />
    </children>
 </AnchorPane>

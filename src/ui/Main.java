@@ -6,14 +6,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
-public class CoverPage extends Application {
+public class Main extends Application {
 
- public static void main(String[] args) {
+public static void main(String[] args) {
         launch(args);
     }
 
-@Override
-public void start(Stage stage) throws Exception {
+    private Stage stage;
+    @Override
+    public void start(Stage stage) throws Exception {
     
     try {
     Parent root = FXMLLoader.load(getClass().getResource("CoverPage.fxml"));
@@ -24,5 +25,10 @@ public void start(Stage stage) throws Exception {
     } catch (Exception e) {
         e.printStackTrace();
     }
+}
+
+public void changeScene(String MenuPagel) throws Exception{
+    Parent pane = FXMLLoader.load(getClass().getResource("MenuPage.fxml"));
+    stage.getScene().setRoot(pane);
 }
 }

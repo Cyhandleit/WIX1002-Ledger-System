@@ -3,6 +3,8 @@ package ui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,110 +13,98 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MenuController implements Initializable {
     @FXML
-    private Label nameLabel;
+    private BorderPane bp;
     @FXML
-    private Button logoutButton;
+    private AnchorPane ap;
     @FXML
-    private AnchorPane scenePane;
-    @FXML
-    private ChoiceBox <String> MenuBar;
+    private Label WelcomeLabel;
 
-    private String[] Transaction = {"Debit","Credit","History","Saving","Credit Loan","Deposit Interest Prediction"};
+    public void displayName(String username,String email,String password){
+        WelcomeLabel.setText("== Welcome, "+username+" ==");
+        System.out.println(email);
+        System.out.println(password);
+    }
+
+    private int userId; // Store the user ID of the logged-in user
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resources) {
+        // Initialization code
+    }
+
+    @FXML
+    private void AccountPage(MouseEvent event) {
+        loadPage("AccountPage");
+    }
+
+    @FXML
+    private void DebitPage(MouseEvent event) {
+        loadPage("DebitPage");
+    }
+
+    @FXML
+    private void CreditPage(MouseEvent event) {
+        loadPage("CreditPage");
+    }
+
+    @FXML
+    private void HistoryPage(MouseEvent event) {
+        loadPage("HistoryPage");
+    }
+
+    @FXML
+    private void SavingPage(MouseEvent event) {
+        loadPage("SavingPage");
+    }
+
+    @FXML
+    private void CreditLoanPage(MouseEvent event) {
+        loadPage("CreditLoanPage");
+    }
+
+    @FXML
+    private void DIPPage(MouseEvent event) {
+        loadPage("DIPPage");
+    }
+
+    private void loadPage(String page) {
+        Parent root = null;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(page + ".fxml"));
+            root = loader.load();
+
+            // Pass the user_id to the AccountController
+            if (page.equals("AccountPage")) {
+                AccountController accountController = loader.getController();
+                accountController.setUserId(userId);
+            }
+
+        } catch (IOException e) {
+            Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        bp.setCenter(root);
+    }
 
     private Stage stage;
     private Scene scene;
     private Parent root;
 
-    public void displayName(String username,String email,String password){
-        nameLabel.setText("Hello: "+username);
-        System.out.println(email);
-        System.out.println(password);
-    }
-
-    public void logout(ActionEvent event) {
-        
-        stage = (Stage)scenePane.getScene().getWindow();
-        System.out.println("You succesfully logged out!");
-        stage.close();
-    }
-
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        
-        MenuBar.getItems().addAll(Transaction);
-        MenuBar.setOnAction(arg01 -> {
-            try {
-                switchToFunctionPages(arg01);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    public void switchToFunctionPages(ActionEvent event) throws IOException {
-        String selectedOption = MenuBar.getValue();
-
-        switch(selectedOption){
-            case "Debit": root = FXMLLoader.load(getClass().getResource("DebitPage.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-    
-            stage.setScene(scene);
-            stage.show();
-            break;
-
-            case "Credit": root = FXMLLoader.load(getClass().getResource("CreditPage.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-    
-            stage.setScene(scene);
-            stage.show();
-            break;
-
-            case "History": root = FXMLLoader.load(getClass().getResource("HistoryPage.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-    
-            stage.setScene(scene);
-            stage.show();
-            break;
-
-            case "Saving": root = FXMLLoader.load(getClass().getResource("SavingPage.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-    
-            stage.setScene(scene);
-            stage.show();
-            break;
-
-            case "Credit Loan": root = FXMLLoader.load(getClass().getResource("CreditLaonPage.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-    
-            stage.setScene(scene);
-            stage.show();
-            break;
-
-            case "Deposit Interest Prediction": root = FXMLLoader.load(getClass().getResource("DIPPage.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-    
-            stage.setScene(scene);
-            stage.show();
-            break;
-
-            default: System.out.println("Wrong Choice!");
-            break;
-        }
-        root = FXMLLoader.load(getClass().getResource("DebitPage.fxml"));
+    public void switchToCoverPage(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("CoverPage.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
 
