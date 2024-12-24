@@ -14,8 +14,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -23,12 +21,10 @@ public class MenuController implements Initializable {
     @FXML
     private BorderPane bp;
     @FXML
-    private AnchorPane ap;
-    @FXML
     private Label WelcomeLabel;
 
-    public void displayName(String username,String email,String password){
-        WelcomeLabel.setText("== Welcome, "+username+" ==");
+    public void displayName(String username, String email, String password) {
+        WelcomeLabel.setText("== Welcome, " + username + " ==");
         System.out.println(email);
         System.out.println(password);
     }
@@ -45,37 +41,37 @@ public class MenuController implements Initializable {
     }
 
     @FXML
-    private void AccountPage(MouseEvent event) {
+    private void AccountPage() {
         loadPage("AccountPage");
     }
 
     @FXML
-    private void DebitPage(MouseEvent event) {
+    private void DebitPage() {
         loadPage("DebitPage");
     }
 
     @FXML
-    private void CreditPage(MouseEvent event) {
+    private void CreditPage() {
         loadPage("CreditPage");
     }
 
     @FXML
-    private void HistoryPage(MouseEvent event) {
+    private void HistoryPage() {
         loadPage("HistoryPage");
     }
 
     @FXML
-    private void SavingPage(MouseEvent event) {
-        loadPage("SavingPage");
+    private void SavingsPage() {
+        loadPage("SavingsPage");
     }
 
     @FXML
-    private void CreditLoanPage(MouseEvent event) {
+    private void CreditLoanPage() {
         loadPage("CreditLoanPage");
     }
 
     @FXML
-    private void DIPPage(MouseEvent event) {
+    private void DIPPage() {
         loadPage("DIPPage");
     }
 
@@ -86,10 +82,20 @@ public class MenuController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(page + ".fxml"));
             root = loader.load();
 
-            // Pass the user_id to the AccountController
+            // Pass the user_id to the appropriate controller
             if (page.equals("AccountPage")) {
                 AccountController accountController = loader.getController();
                 accountController.setUserId(userId);
+            } else if (page.equals("DebitPage")) {
+                DebitController debitController = loader.getController();
+                debitController.setUserId(userId);
+                debitController.setSavingsController(getSavingsController());
+            } else if (page.equals("CreditPage")) {
+                CreditController creditController = loader.getController();
+                creditController.setUserId(userId);
+            } else if (page.equals("SavingsPage")) {
+                SavingsController savingsController = loader.getController();
+                savingsController.setUserId(userId);
             }
 
         } catch (IOException e) {
@@ -99,10 +105,22 @@ public class MenuController implements Initializable {
         bp.setCenter(root);
     }
 
+    private SavingsController getSavingsController() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SavingsPage.fxml"));
+            loader.load();
+            return loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private Stage stage;
     private Scene scene;
     private Parent root;
 
+    @FXML
     public void switchToCoverPage(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("CoverPage.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

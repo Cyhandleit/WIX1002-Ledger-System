@@ -24,30 +24,38 @@ public class AccountController {
     // Method to set the user ID (called from the MenuController)
     public void setUserId(int userId) {
         this.userId = userId;
-        fetchAccountDetails(); // Fetch and display account details when user_id is set
+        loadAccountDetails();
     }
 
-    @FXML
-    public void fetchAccountDetails() {
-        try (Connection connection = ledgerDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT balance, savings, loan FROM accounts WHERE user_id = ?")) {
-
-            preparedStatement.setInt(1, userId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                double balance = resultSet.getDouble("balance");
-                double savings = resultSet.getDouble("savings");
-                double loan = resultSet.getDouble("loan");
-
-                // Display the account details
-                displayAccount(balance, savings, loan);
-            } else {
-                // If no account details are found, display default values
-                displayAccount(0.00, 0.00, 0.00);
+    public void loadAccountDetails() {
+        try (Connection connection = ledgerDB.getConnection()) {
+            // Calculate the balance by summing all transactions
+            double balance = 0.0;
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT SUM(amount) AS total_balance FROM transactions WHERE user_id = ?")) {
+                stmt.setInt(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        balance = rs.getDouble("total_balance");
+                    }
+                }
             }
+
+            // Retrieve savings and loan amounts
+            double savings = 0.0;
+            double loan = 0.0;
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT savings, loan FROM accounts WHERE user_id = ?")) {
+                stmt.setInt(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        savings = rs.getDouble("savings");
+                        loan = rs.getDouble("loan");
+                    }
+                }
+            }
+
+            displayAccount(balance, savings, loan);
 
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());

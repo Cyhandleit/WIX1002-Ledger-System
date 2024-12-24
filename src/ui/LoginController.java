@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,6 +33,7 @@ public class LoginController {
     private Scene scene;
     private Parent root;
 
+    @FXML
     public void switchToCoverPage(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("CoverPage.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -41,9 +43,12 @@ public class LoginController {
         stage.show();
     }
 
+    @FXML
     public void userLogIn(ActionEvent event) throws IOException {
         String inputUsername = username.getText();
         String inputPassword = password.getText();
+
+        System.out.println("Attempting to log in with username: " + inputUsername);
 
         try (Connection connection = ledgerDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
@@ -73,12 +78,17 @@ public class LoginController {
                 stage.show();
             } else {
                 wrongLogIn.setText("Wrong username or password!");
+                System.out.println("Login failed: Wrong username or password.");
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
             wrongLogIn.setText("Database error occurred!");
+        } catch (IOException e) {
+            System.err.println("FXML loading error: " + e.getMessage());
+            e.printStackTrace();
+            wrongLogIn.setText("FXML loading error occurred!");
         }
     }
 }
