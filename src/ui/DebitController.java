@@ -15,15 +15,13 @@ public class DebitController {
     private TextField DescTextField;
 
     private int userId; // Store the user ID of the logged-in user
-    private SavingsController savingsController;
-
     // Method to set the user ID (called from the MenuController)
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
+    // Method to set the SavingsController (called from the MenuController)
     public void setSavingsController(SavingsController savingsController) {
-        this.savingsController = savingsController;
     }
 
     @FXML
@@ -31,22 +29,6 @@ public class DebitController {
         try {
             double debit = Double.parseDouble(DebitAmount.getText());
             String desc = DescTextField.getText();
-
-            // Ensure savingsController is not null
-            if (savingsController == null) {
-                System.err.println("SavingsController is not initialized.");
-                return;
-            }
-
-            // Calculate the savings amount
-            double savingsPercentage = savingsController.getSavingsPercentage();
-            double savingsAmount = debit * (savingsPercentage / 100);
-            double debitAmountAfterSavings = debit - savingsAmount;
-
-            System.out.println("Debit amount: " + debit);
-            System.out.println("Savings percentage: " + savingsPercentage);
-            System.out.println("Savings amount: " + savingsAmount);
-            System.out.println("Debit amount after savings: " + debitAmountAfterSavings);
 
             // Insert the transaction into the database
             try (Connection connection = ledgerDB.getConnection()) {
@@ -56,17 +38,9 @@ public class DebitController {
                 try (PreparedStatement transactionStmt = connection.prepareStatement(
                         "INSERT INTO transactions (user_id, amount, description) VALUES (?, ?, ?)")) {
                     transactionStmt.setInt(1, userId);
-                    transactionStmt.setDouble(2, debitAmountAfterSavings); // Record as positive amount
+                    transactionStmt.setDouble(2, debit); // Record as positive amount
                     transactionStmt.setString(3, desc);
                     transactionStmt.executeUpdate();
-                }
-
-                // Insert the savings amount as a separate transaction
-                try (PreparedStatement savingsStmt = connection.prepareStatement(
-                        "INSERT INTO transactions (user_id, amount, description) VALUES (?, ?, 'savings')")) {
-                    savingsStmt.setInt(1, userId);
-                    savingsStmt.setDouble(2, savingsAmount);
-                    savingsStmt.executeUpdate();
                 }
 
                 connection.commit(); // Commit transaction

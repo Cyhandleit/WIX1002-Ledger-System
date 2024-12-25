@@ -89,7 +89,12 @@ public class MenuController implements Initializable {
             } else if (page.equals("DebitPage")) {
                 DebitController debitController = loader.getController();
                 debitController.setUserId(userId);
-                debitController.setSavingsController(getSavingsController());
+                SavingsController savingsController = getSavingsController();
+                if (savingsController != null) {
+                    debitController.setSavingsController(savingsController);
+                } else {
+                    System.err.println("Failed to initialize SavingsController.");
+                }
             } else if (page.equals("CreditPage")) {
                 CreditController creditController = loader.getController();
                 creditController.setUserId(userId);
