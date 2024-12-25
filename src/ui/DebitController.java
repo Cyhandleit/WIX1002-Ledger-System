@@ -2,14 +2,7 @@ package ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -63,16 +56,16 @@ public class DebitController {
                 try (PreparedStatement transactionStmt = connection.prepareStatement(
                         "INSERT INTO transactions (user_id, amount, description) VALUES (?, ?, ?)")) {
                     transactionStmt.setInt(1, userId);
-                    transactionStmt.setDouble(2, -debitAmountAfterSavings); // Record as negative amount
+                    transactionStmt.setDouble(2, debitAmountAfterSavings); // Record as positive amount
                     transactionStmt.setString(3, desc);
                     transactionStmt.executeUpdate();
                 }
 
-                // Update the savings amount
+                // Insert the savings amount as a separate transaction
                 try (PreparedStatement savingsStmt = connection.prepareStatement(
-                        "UPDATE accounts SET savings = savings + ? WHERE user_id = ?")) {
-                    savingsStmt.setDouble(1, savingsAmount);
-                    savingsStmt.setInt(2, userId);
+                        "INSERT INTO transactions (user_id, amount, description) VALUES (?, ?, 'savings')")) {
+                    savingsStmt.setInt(1, userId);
+                    savingsStmt.setDouble(2, savingsAmount);
                     savingsStmt.executeUpdate();
                 }
 

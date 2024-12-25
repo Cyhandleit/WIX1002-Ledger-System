@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-
 
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.HistoryController">
    <children>
@@ -22,6 +26,7 @@
                       <TableColumn fx:id="balanceColumn" prefWidth="70.0" text="Balance" />
                     </columns>
                   </TableView>
+                  <Button layoutX="10.0" layoutY="220.0" mnemonicParsing="false" onAction="#openSpendingDistribution" text="View Spending Distribution" />
                </children>
             </AnchorPane>
         </content>

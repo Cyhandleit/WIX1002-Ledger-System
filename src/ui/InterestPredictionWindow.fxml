@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.InterestPredictionController">
+   <children>
+      <Label fx:id="bankLabel" layoutX="50.0" layoutY="30.0" text="Bank: " />
+      <Label fx:id="interestRateLabel" layoutX="50.0" layoutY="60.0" text="Interest Rate: " />
+      <Label fx:id="dailyInterestLabel" layoutX="50.0" layoutY="90.0" text="Daily Interest: " />
+      <Label fx:id="monthlyInterestLabel" layoutX="50.0" layoutY="120.0" text="Monthly Interest: " />
+      <Label fx:id="annuallyInterestLabel" layoutX="50.0" layoutY="150.0" text="Annually Interest: " />
+      <ChoiceBox fx:id="periodChoiceBox" layoutX="50.0" layoutY="180.0" prefWidth="150.0" />
+      <BarChart fx:id="interestBarChart" layoutX="50.0" layoutY="220.0" prefHeight="200.0" prefWidth="500.0">
+         <xAxis>
+            <CategoryAxis label="Period" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis label="Interest" />
+         </yAxis>
+      </BarChart>
+   </children>
+</AnchorPane>

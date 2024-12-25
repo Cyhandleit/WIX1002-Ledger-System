@@ -99,6 +99,12 @@ public class MenuController implements Initializable {
             } else if (page.equals("HistoryPage")) {
                 HistoryController historyController = loader.getController();
                 historyController.setUserId(userId);
+            } else if (page.equals("CreditLoanPage")) {
+                CreditLoanController creditLoanController = loader.getController();
+                creditLoanController.setUserId(userId);
+            } else if (page.equals("DIPPage")) {
+                DIPController dipController = loader.getController();
+                dipController.setUserId(userId);
             }
 
         } catch (IOException e) {

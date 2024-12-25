@@ -38,7 +38,7 @@ public class RegisterController {
     }
 
     @FXML
-    public void MenuPage(ActionEvent event) {
+    public void registerUser(ActionEvent event) {
         String username = nameTextField.getText();
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
@@ -64,20 +64,8 @@ public class RegisterController {
                     if (generatedKeys.next()) {
                         int userId = generatedKeys.getInt(1);
 
-                        // Switch to the menu page
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuPage.fxml"));
-                        root = loader.load();
-
-                        MenuController menuController = loader.getController();
-                        menuController.displayName(username, email, password);
-                        menuController.setUserId(userId);
-                        System.out.println("Register Successfully!");
-
-                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        scene = new Scene(root);
-
-                        stage.setScene(scene);
-                        stage.show();
+                        // Switch to the cover page for login
+                        switchToCoverPage(event);
                     }
                 }
             } else {

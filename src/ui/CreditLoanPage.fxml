@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CreditLoanController">
    <children>
-      <Text layoutX="90.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is Credit Loan Page">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Text>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="276.0" prefWidth="470.0">
+         <children>
+            <Text layoutX="50.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Apply for Loan">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <TextField fx:id="principalAmountField" layoutX="50.0" layoutY="100.0" promptText="Principal Amount" />
+            <TextField fx:id="interestRateField" layoutX="50.0" layoutY="140.0" promptText="Interest Rate (%)" />
+            <TextField fx:id="repaymentPeriodField" layoutX="50.0" layoutY="180.0" promptText="Repayment Period (months)" />
+            <Button fx:id="applyButton" layoutX="50.0" layoutY="220.0" mnemonicParsing="false" onAction="#applyLoan" text="Apply" />
+            <Text layoutX="287.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repay Loan">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <TextField fx:id="repayAmountField" layoutX="287.0" layoutY="100.0" promptText="Repayment Amount" />
+            <Button fx:id="repayButton" layoutX="287.0" layoutY="153.0" mnemonicParsing="false" onAction="#repayLoan" text="Repay" />
+            <Label fx:id="statusLabel" layoutX="50.0" layoutY="260.0" textFill="RED" />
+            <Button layoutX="287.0" layoutY="220.0" mnemonicParsing="false" onAction="#openLoanRepayments" text="View Loan Repayments" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</HBox>

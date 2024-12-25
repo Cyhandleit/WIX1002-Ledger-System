@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,11 +8,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 public class HistoryController implements Initializable {
 
@@ -56,8 +62,8 @@ public class HistoryController implements Initializable {
                         String date = rs.getString("date");
                         String description = rs.getString("description");
                         double amount = rs.getDouble("amount");
-                        double debit = amount < 0 ? -amount : 0;
-                        double credit = amount > 0 ? amount : 0;
+                        double debit = amount > 0 ? amount : 0;
+                        double credit = amount < 0 ? -amount : 0;
                         runningBalance += amount;
                         transactionTable.getItems().add(new Transaction(date, description, debit, credit, runningBalance));
                     }
@@ -65,6 +71,25 @@ public class HistoryController implements Initializable {
             }
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openSpendingDistribution(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SpendingDistributionPage.fxml"));
+            Parent root = loader.load();
+
+            SpendingDistributionController controller = loader.getController();
+            controller.setUserId(userId);
+            controller.loadSpendingDistribution();
+
+            Stage stage = new Stage();
+            stage.setTitle("Spending Distribution");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
