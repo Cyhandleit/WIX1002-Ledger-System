@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 
 <HBox alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.AccountController">
    <children>
@@ -15,37 +15,45 @@
          <center>
             <AnchorPane prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <Text layoutX="20.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Balance :">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="20.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Savings :">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="20.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loan :">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-                  <Label fx:id="BalanceLabel" layoutX="150.0" layoutY="30.0" text="Balance" textFill="#0059ff">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="SavingsLabel" layoutX="150.0" layoutY="70.0" text="Savings" textFill="#0059ff">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="LoanLabel" layoutX="150.0" layoutY="110.0" text="Loan" textFill="#0059ff">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <PieChart fx:id="spendingDistributionChart" layoutX="20.0" layoutY="180.0" prefHeight="200.0" prefWidth="560.0" />
+                  <VBox alignment="CENTER" spacing="10" layoutX="20.0" layoutY="20.0">
+                     <HBox spacing="10">
+                        <Text text="Balance :">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                        <Label fx:id="BalanceLabel" text="Balance" textFill="#0059ff">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </HBox>
+                     <HBox spacing="10">
+                        <Text text="Savings :">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                        <Label fx:id="SavingsLabel" text="Savings" textFill="#0059ff">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </HBox>
+                     <HBox spacing="10">
+                        <Text text="Loan :">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                        <Label fx:id="LoanLabel" text="Loan" textFill="#0059ff">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </HBox>
+                     <PieChart fx:id="spendingDistributionChart" prefHeight="200.0" prefWidth="560.0" />
+                  </VBox>
                </children>
             </AnchorPane>
          </center>

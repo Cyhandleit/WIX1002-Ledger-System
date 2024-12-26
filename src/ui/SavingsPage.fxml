@@ -5,26 +5,40 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 
 <HBox alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.SavingsController">
    <children>
-      <BorderPane prefHeight="400.0" prefWidth="600.0">
-         <center>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Text layoutX="50.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the savings amount :">
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+         <children>
+            <BorderPane prefHeight="400.0" prefWidth="600.0">
+               <top>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="This is Savings Page" BorderPane.alignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="SavingsTextField" alignment="CENTER_RIGHT" layoutX="50.0" layoutY="90.0" onAction="#setSavingsPercentage" prefHeight="26.0" prefWidth="500.0" promptText="The amount will deduct from the next debit" />
-                  <Button fx:id="ConfirmButton" layoutX="250.0" layoutY="130.0" mnemonicParsing="false" onAction="#setSavingsPercentage" text="Confirm" />
-               </children>
-            </AnchorPane>
-         </center>
-      </BorderPane>
+               </top>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER" layoutX="50.0" layoutY="50.0" spacing="10">
+                           <Text text="Enter the savings amount :">
+                              <font>
+                                 <Font size="20.0" />
+                              </font>
+                           </Text>
+                           <TextField fx:id="SavingsTextField" alignment="CENTER_RIGHT" onAction="#setSavingsPercentage" prefHeight="26.0" prefWidth="500.0" promptText="The amount will deduct from the next debit" />
+                           <Button fx:id="ConfirmButton" mnemonicParsing="false" onAction="#setSavingsPercentage" text="Confirm" />
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </children>
+      </HBox>
    </children>
 </HBox>

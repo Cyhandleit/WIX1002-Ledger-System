@@ -50,6 +50,12 @@ public class RegisterController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
+        // Validate input fields
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            statusLabel.setText("All fields are required.");
+            return;
+        }
+
         try (Connection connection = ledgerDB.getConnection()) {
             // Check if the username or email already exists
             String checkQuery = "SELECT user_id FROM users WHERE username = ? OR email = ?";

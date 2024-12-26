@@ -10,43 +10,54 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.HistoryController">
    <children>
-      <BorderPane prefHeight="350.0" prefWidth="650.0">
-         <top>
-            <AnchorPane prefHeight="100.0" prefWidth="650.0" BorderPane.alignment="CENTER">
-               <children>
-                  <DatePicker fx:id="startDatePicker" layoutX="10.0" layoutY="10.0" promptText="Start Date" />
-                  <DatePicker fx:id="endDatePicker" layoutX="150.0" layoutY="10.0" promptText="End Date" />
-                  <ComboBox fx:id="transactionTypeComboBox" layoutX="290.0" layoutY="10.0" promptText="Transaction Type" />
-                  <ComboBox fx:id="dateRangeComboBox" layoutX="430.0" layoutY="10.0" promptText="Date Range" />
-                  <TextField fx:id="minAmountField" layoutX="10.0" layoutY="50.0" promptText="Min Amount" />
-                  <TextField fx:id="maxAmountField" layoutX="150.0" layoutY="50.0" promptText="Max Amount" />
-                  <ComboBox fx:id="sortComboBox" layoutX="290.0" layoutY="50.0" promptText="Sort By" />
-                  <Button layoutX="430.0" layoutY="50.0" mnemonicParsing="false" onAction="#applyFiltersAndSort" text="Apply" />
-               </children>
-            </AnchorPane>
-         </top>
-         <center>
-            <ScrollPane prefHeight="400.0" prefWidth="650.0" BorderPane.alignment="CENTER">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0">
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+         <children>
+            <BorderPane prefHeight="400.0" prefWidth="600.0">
+               <top>
+                  <AnchorPane prefHeight="100.0" prefWidth="650.0" BorderPane.alignment="CENTER">
                      <children>
-                        <TableView fx:id="transactionTable" prefHeight="209.0" prefWidth="485.0">
-                           <columns>
-                              <TableColumn fx:id="dateColumn" prefWidth="99.99996572732925" text="Date" />
-                              <TableColumn fx:id="descriptionColumn" prefWidth="172.80006408691406" text="Description" />
-                              <TableColumn fx:id="debitColumn" prefWidth="70.0" text="Debit" />
-                              <TableColumn fx:id="creditColumn" prefWidth="70.0" text="Credit" />
-                              <TableColumn fx:id="balanceColumn" prefWidth="70.0" text="Balance" />
-                           </columns>
-                        </TableView>
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="10">
+                           <HBox spacing="10">
+                              <DatePicker fx:id="startDatePicker" promptText="Start Date" />
+                              <DatePicker fx:id="endDatePicker" promptText="End Date" />
+                              <ComboBox fx:id="transactionTypeComboBox" promptText="Transaction Type" />
+                              <ComboBox fx:id="dateRangeComboBox" promptText="Date Range" />
+                           </HBox>
+                           <HBox spacing="10">
+                              <TextField fx:id="minAmountField" promptText="Min Amount" />
+                              <TextField fx:id="maxAmountField" promptText="Max Amount" />
+                              <ComboBox fx:id="sortComboBox" promptText="Sort By" />
+                              <Button mnemonicParsing="false" onAction="#applyFiltersAndSort" text="Apply" />
+                           </HBox>
+                        </VBox>
                      </children>
                   </AnchorPane>
-               </content>
-            </ScrollPane>
-         </center>
-      </BorderPane>
+               </top>
+               <center>
+                  <ScrollPane prefHeight="400.0" prefWidth="650.0" BorderPane.alignment="CENTER">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0">
+                           <children>
+                              <TableView fx:id="transactionTable" prefHeight="209.0" prefWidth="485.0">
+                                 <columns>
+                                    <TableColumn fx:id="dateColumn" prefWidth="99.99996572732925" text="Date" />
+                                    <TableColumn fx:id="descriptionColumn" prefWidth="172.80006408691406" text="Description" />
+                                    <TableColumn fx:id="debitColumn" prefWidth="70.0" text="Debit" />
+                                    <TableColumn fx:id="creditColumn" prefWidth="70.0" text="Credit" />
+                                    <TableColumn fx:id="balanceColumn" prefWidth="70.0" text="Balance" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </center>
+            </BorderPane>
+         </children>
+      </HBox>
    </children>
 </HBox>
