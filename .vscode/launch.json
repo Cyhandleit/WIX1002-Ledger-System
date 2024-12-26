@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "bank",
+            "request": "launch",
+            "mainClass": "bank",
+            "projectName": "WIX1002-Ledger-System-4_c14840d5"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
