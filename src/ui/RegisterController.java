@@ -11,17 +11,24 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class RegisterController {
 
     @FXML
-    TextField nameTextField;
+    private TextField usernameField;
     @FXML
-    TextField emailTextField;
+    private TextField emailField;
     @FXML
-    TextField passwordTextField;
+    private PasswordField passwordField;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Button registerButton;
 
     private Stage stage;
     private Scene scene;
@@ -38,42 +45,66 @@ public class RegisterController {
     }
 
     @FXML
-    public void registerUser(ActionEvent event) {
-        String username = nameTextField.getText();
-        String email = emailTextField.getText();
-        String password = passwordTextField.getText();
+    private void registerUser(ActionEvent event) {
+        String username = usernameField.getText();
+        String email = emailField.getText();
+        String password = passwordField.getText();
 
-        System.out.println("Attempting to register with username: " + username + ", email: " + email);
-
-        // Insert user data into the database
-        try (Connection connection = ledgerDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "INSERT INTO users (username, email, password) VALUES (?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, email);
-            preparedStatement.setString(3, password);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("User registered successfully!");
-
-                // Retrieve the generated user ID
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int userId = generatedKeys.getInt(1);
-
-                        // Switch to the cover page for login
-                        switchToCoverPage(event);
+        try (Connection connection = ledgerDB.getConnection()) {
+            // Check if the username or email already exists
+            String checkQuery = "SELECT user_id FROM users WHERE username = ? OR email = ?";
+            try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+                checkStmt.setString(1, username);
+                checkStmt.setString(2, email);
+                try (ResultSet rs = checkStmt.executeQuery()) {
+                    if (rs.next()) {
+                        statusLabel.setText("Username or email already exists.");
+                        return;
                     }
                 }
-            } else {
-                System.out.println("User registration failed!");
             }
 
+            // Insert the new user into the users table
+            String insertQuery = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+            try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                insertStmt.setString(1, username);
+                insertStmt.setString(2, email);
+                insertStmt.setString(3, password);
+                insertStmt.executeUpdate();
+
+                try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int userId = generatedKeys.getInt(1);
+                        // Use the userId for further processing, e.g., initializing the account
+                        initializeAccount(userId);
+                    }
+                }
+            }
+
+            statusLabel.setText("Registration successful!");
+            switchToCoverPage(event); // Automatically switch to cover page after successful registration
+
         } catch (SQLException | IOException e) {
-            System.err.println("Database error: " + e.getMessage());
+            statusLabel.setText("Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeAccount(int userId) {
+        try (Connection connection = ledgerDB.getConnection()) {
+            String accountQuery = "INSERT INTO accounts (user_id, balance, loan) VALUES (?, 0.00, 0.00)";
+            try (PreparedStatement accountStmt = connection.prepareStatement(accountQuery)) {
+                accountStmt.setInt(1, userId);
+                accountStmt.executeUpdate();
+            }
+
+            String savingsQuery = "INSERT INTO savings (user_id, amount, interest_rate) VALUES (?, 0.00, 0.00)";
+            try (PreparedStatement savingsStmt = connection.prepareStatement(savingsQuery)) {
+                savingsStmt.setInt(1, userId);
+                savingsStmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to initialize account: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tooltip;
 
 public class SpendingTrendsController {
 
@@ -18,9 +19,12 @@ public class SpendingTrendsController {
 
     public void setUserId(int userId) {
         this.userId = userId;
+        System.out.println("SpendingTrendsController setUserId: " + userId);
     }
 
+    @FXML
     public void loadSpendingTrends() {
+        System.out.println("Loading spending trends for userId: " + userId);
         try (Connection connection = ledgerDB.getConnection()) {
             String query = "SELECT date, SUM(amount) AS total_spending FROM transactions WHERE user_id = ? AND amount < 0 GROUP BY date ORDER BY date";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -31,7 +35,9 @@ public class SpendingTrendsController {
                     while (rs.next()) {
                         String date = rs.getString("date");
                         double totalSpending = rs.getDouble("total_spending");
-                        series.getData().add(new XYChart.Data<>(date, -totalSpending));
+                        XYChart.Data<String, Number> data = new XYChart.Data<>(date, -totalSpending);
+                        series.getData().add(data);
+                        addTooltip(data);
                     }
                     spendingTrendsChart.getData().add(series);
                 }
@@ -40,5 +46,11 @@ public class SpendingTrendsController {
             System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void addTooltip(XYChart.Data<String, Number> data) {
+        Tooltip tooltip = new Tooltip(String.format("%s: %.2f", data.getXValue(), data.getYValue().doubleValue()));
+        Tooltip.install(data.getNode(), tooltip);
     }
 }

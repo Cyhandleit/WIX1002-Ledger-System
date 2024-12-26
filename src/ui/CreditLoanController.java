@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class CreditLoanController {
 
@@ -48,18 +49,29 @@ public class CreditLoanController {
 
             double totalRepayment = principal + (principal * interestRate / 100);
             double monthlyInstallment = totalRepayment / repaymentPeriod;
+            LocalDate dueDate = LocalDate.now().plusMonths(repaymentPeriod); // Calculate the due date
 
             try (Connection connection = ledgerDB.getConnection()) {
-                String query = "INSERT INTO loans (user_id, principal, interest_rate, repayment_period, total_repayment, monthly_installment) VALUES (?, ?, ?, ?, ?, ?)";
-                try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                    stmt.setInt(1, userId);
-                    stmt.setDouble(2, principal);
-                    stmt.setDouble(3, interestRate);
-                    stmt.setInt(4, repaymentPeriod);
-                    stmt.setDouble(5, totalRepayment);
-                    stmt.setDouble(6, monthlyInstallment);
-                    stmt.executeUpdate();
+                connection.setAutoCommit(false); // Start transaction
+
+                // Insert the loan into the loans table
+                String loanQuery = "INSERT INTO loans (user_id, principal, interest_rate, repayment_period, total_repayment, monthly_installment, due_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement loanStmt = connection.prepareStatement(loanQuery)) {
+                    loanStmt.setInt(1, userId);
+                    loanStmt.setDouble(2, principal);
+                    loanStmt.setDouble(3, interestRate);
+                    loanStmt.setInt(4, repaymentPeriod);
+                    loanStmt.setDouble(5, totalRepayment);
+                    loanStmt.setDouble(6, monthlyInstallment);
+                    loanStmt.setDate(7, java.sql.Date.valueOf(dueDate)); // Set the due date
+                    loanStmt.executeUpdate();
                 }
+
+                // Insert the loan transaction into the transactions table
+                TransactionUtils.recordTransaction(userId, principal, "Loan");
+
+                connection.commit(); // Commit transaction
+
                 statusLabel.setText("Loan applied successfully!");
             } catch (SQLException e) {
                 statusLabel.setText("Database error: " + e.getMessage());
@@ -76,17 +88,22 @@ public class CreditLoanController {
             double repayAmount = Double.parseDouble(repayAmountField.getText());
 
             try (Connection connection = ledgerDB.getConnection()) {
-                String query = "UPDATE loans SET total_repayment = total_repayment - ? WHERE user_id = ? AND total_repayment > 0";
-                try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                    stmt.setDouble(1, repayAmount);
-                    stmt.setInt(2, userId);
-                    int rowsUpdated = stmt.executeUpdate();
-                    if (rowsUpdated > 0) {
-                        statusLabel.setText("Repayment successful!");
-                    } else {
-                        statusLabel.setText("No outstanding loan found.");
-                    }
+                connection.setAutoCommit(false); // Start transaction
+
+                // Update the loan repayment in the loans table
+                String loanQuery = "UPDATE loans SET total_repayment = total_repayment - ? WHERE user_id = ? AND total_repayment > 0";
+                try (PreparedStatement loanStmt = connection.prepareStatement(loanQuery)) {
+                    loanStmt.setDouble(1, repayAmount);
+                    loanStmt.setInt(2, userId);
+                    loanStmt.executeUpdate();
                 }
+
+                // Insert the repayment transaction into the transactions table
+                TransactionUtils.recordTransaction(userId, -repayAmount, "Loan Repayment");
+
+                connection.commit(); // Commit transaction
+
+                statusLabel.setText("Repayment successful!");
             } catch (SQLException e) {
                 statusLabel.setText("Database error: " + e.getMessage());
                 e.printStackTrace();

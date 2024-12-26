@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 
 public class AccountController {
 
@@ -32,43 +33,37 @@ public class AccountController {
         loadSpendingDistribution();
     }
 
+    @FXML
     public void loadAccountDetails() {
         try (Connection connection = ledgerDB.getConnection()) {
-            // Calculate the balance by summing all transactions
+            // Retrieve balance and savings amounts from the accounts table
             double balance = 0.0;
-            try (PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT SUM(amount) AS total_balance FROM transactions WHERE user_id = ?")) {
-                stmt.setInt(1, userId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        balance = rs.getDouble("total_balance");
-                    }
-                }
-            }
-
-            // Retrieve savings and loan amounts from transactions
             double savings = 0.0;
-            double loan = 0.0;
+            double totalLoanAmount = 0.0;
+
             try (PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT SUM(amount) AS total_savings FROM transactions WHERE user_id = ? AND description = 'savings'")) {
+                    "SELECT balance, savings FROM accounts WHERE user_id = ?")) {
                 stmt.setInt(1, userId);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        savings = rs.getDouble("total_savings");
-                    }
-                }
-            }
-            try (PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT SUM(amount) AS total_loan FROM transactions WHERE user_id = ? AND description = 'loan'")) {
-                stmt.setInt(1, userId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        loan = rs.getDouble("total_loan");
+                        balance = rs.getDouble("balance");
+                        savings = rs.getDouble("savings");
                     }
                 }
             }
 
-            displayAccount(balance, savings, loan);
+            // Calculate the total loan amount after interest
+            try (PreparedStatement loanStmt = connection.prepareStatement(
+                    "SELECT SUM(total_repayment) AS total_loan_amount FROM loans WHERE user_id = ? AND total_repayment > 0")) {
+                loanStmt.setInt(1, userId);
+                try (ResultSet rs = loanStmt.executeQuery()) {
+                    if (rs.next()) {
+                        totalLoanAmount = rs.getDouble("total_loan_amount");
+                    }
+                }
+            }
+
+            displayAccount(balance, savings, totalLoanAmount);
 
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
@@ -83,6 +78,7 @@ public class AccountController {
         LoanLabel.setText(String.format("%.2f", loan));
     }
 
+    @FXML
     private void loadSpendingDistribution() {
         double totalDebit = 0.0;
         double totalCredit = 0.0;
@@ -99,10 +95,10 @@ public class AccountController {
                         double totalAmount = rs.getDouble("total_amount");
 
                         switch (description) {
-                            case "savings":
+                            case "Savings":
                                 totalSavings += totalAmount;
                                 break;
-                            case "loan":
+                            case "Loan":
                                 totalLoan += totalAmount;
                                 break;
                             default:
@@ -122,9 +118,18 @@ public class AccountController {
         }
 
         spendingDistributionChart.getData().clear();
-        spendingDistributionChart.getData().add(new PieChart.Data("Debit", Math.abs(totalDebit)));
-        spendingDistributionChart.getData().add(new PieChart.Data("Credit", Math.abs(totalCredit)));
-        spendingDistributionChart.getData().add(new PieChart.Data("Savings", Math.abs(totalSavings)));
-        spendingDistributionChart.getData().add(new PieChart.Data("Loan", Math.abs(totalLoan)));
+        addPieChartData("Debit", Math.abs(totalDebit), totalDebit + totalCredit + totalSavings + totalLoan);
+        addPieChartData("Credit", Math.abs(totalCredit), totalDebit + totalCredit + totalSavings + totalLoan);
+        addPieChartData("Savings", Math.abs(totalSavings), totalDebit + totalCredit + totalSavings + totalLoan);
+        addPieChartData("Loan", Math.abs(totalLoan), totalDebit + totalCredit + totalSavings + totalLoan);
+    }
+
+    @FXML
+    private void addPieChartData(String name, double value, double total) {
+        PieChart.Data data = new PieChart.Data(name, value);
+        spendingDistributionChart.getData().add(data);
+        double percentage = (value / total) * 100;
+        Tooltip tooltip = new Tooltip(String.format("%s: %.2f (%.2f%%)", name, value, percentage));
+        Tooltip.install(data.getNode(), tooltip);
     }
 }

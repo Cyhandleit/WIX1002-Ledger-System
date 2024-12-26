@@ -28,7 +28,7 @@ public class DIPController {
     private ChoiceBox<String> bankChoiceBox;
     @FXML
     private Button checkButton;
-
+    @FXML
     private Map<String, Double> bankInterestRates;
 
     @FXML
@@ -63,12 +63,17 @@ public class DIPController {
     private double getCurrentBalance() {
         double balance = 0.0;
         try (Connection connection = ledgerDB.getConnection()) {
-            String query = "SELECT SUM(amount) AS total_balance FROM transactions WHERE user_id = ?";
+            System.out.println("Database connection established.");
+            String query = "SELECT balance FROM accounts WHERE user_id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, userId);
+                System.out.println("Executing query: " + query + " with user_id: " + userId);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        balance = rs.getDouble("total_balance");
+                        balance = rs.getDouble("balance");
+                        System.out.println("Balance retrieved: " + balance);
+                    } else {
+                        System.out.println("No balance found for user_id: " + userId);
                     }
                 }
             }

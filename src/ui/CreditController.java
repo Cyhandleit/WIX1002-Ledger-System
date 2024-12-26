@@ -1,7 +1,5 @@
 package ui;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -22,27 +20,12 @@ public class CreditController {
 
     @FXML
     private void submit(ActionEvent event) {
-        try (Connection connection = ledgerDB.getConnection()) {
+        try {
             double credit = Double.parseDouble(CreditAmount.getText());
             String desc = DescTextField.getText();
-
-            connection.setAutoCommit(false); // Start transaction
-
-            // Insert the transaction into the transactions table
-            try (PreparedStatement transactionStmt = connection.prepareStatement(
-                    "INSERT INTO transactions (user_id, amount, description) VALUES (?, ?, ?)")) {
-                transactionStmt.setInt(1, userId);
-                transactionStmt.setDouble(2, -credit); // Record as negative amount
-                transactionStmt.setString(3, desc);
-                transactionStmt.executeUpdate();
-            }
-
-            connection.commit(); // Commit transaction
-            System.out.println("Transaction successfully recorded.");
-        } catch (SQLException e) {
-            System.out.println("Transaction failed: " + e.getMessage());
+            TransactionUtils.recordTransaction(userId, -credit, desc);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid credit amount: " + e.getMessage());
+            System.err.println("Invalid credit amount: " + e.getMessage());
         }
     }
 }

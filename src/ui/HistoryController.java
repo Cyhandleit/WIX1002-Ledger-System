@@ -1,23 +1,22 @@
 package ui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 
 public class HistoryController implements Initializable {
 
@@ -34,39 +33,138 @@ public class HistoryController implements Initializable {
     @FXML
     private TableColumn<Transaction, Double> balanceColumn;
 
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private ComboBox<String> transactionTypeComboBox;
+    @FXML
+    private TextField minAmountField;
+    @FXML
+    private TextField maxAmountField;
+    @FXML
+    private ComboBox<String> sortComboBox;
+    @FXML
+    private ComboBox<String> dateRangeComboBox;
+
     private int userId; // Store the user ID of the logged-in user
 
     // Method to set the user ID (called from the MenuController)
     public void setUserId(int userId) {
         this.userId = userId;
+        System.out.println("HistoryController setUserId: " + userId);
         loadTransactionHistory();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resources) {
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("displayDate"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         debitColumn.setCellValueFactory(new PropertyValueFactory<>("debit"));
         creditColumn.setCellValueFactory(new PropertyValueFactory<>("credit"));
         balanceColumn.setCellValueFactory(new PropertyValueFactory<>("balance"));
+
+        transactionTypeComboBox.getItems().addAll("All", "Debit", "Credit", "Loan", "Savings");
+        sortComboBox.getItems().addAll("Date Ascending", "Date Descending", "Amount Ascending", "Amount Descending");
+        dateRangeComboBox.getItems().addAll("All Time", "Last Week", "Last Month", "Last Year");
+    }
+
+    @FXML
+    private void applyFiltersAndSort() {
+        loadTransactionHistory();
     }
 
     private void loadTransactionHistory() {
-        try (Connection connection = ledgerDB.getConnection()) {
-            String query = "SELECT date, description, amount FROM transactions WHERE user_id = ? ORDER BY date";
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setInt(1, userId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    double runningBalance = 0.0;
-                    while (rs.next()) {
-                        String date = rs.getString("date");
-                        String description = rs.getString("description");
-                        double amount = rs.getDouble("amount");
-                        double debit = amount > 0 ? amount : 0;
-                        double credit = amount < 0 ? -amount : 0;
-                        runningBalance += amount;
-                        transactionTable.getItems().add(new Transaction(date, description, debit, credit, runningBalance));
-                    }
+        transactionTable.getItems().clear();
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+        String transactionType = transactionTypeComboBox.getValue();
+        String minAmountStr = minAmountField.getText();
+        String maxAmountStr = maxAmountField.getText();
+        String sortOption = sortComboBox.getValue();
+        String dateRange = dateRangeComboBox.getValue();
+
+        String displayDate = "All Time";
+        if (dateRange != null) {
+            switch (dateRange) {
+                case "Last Week":
+                    startDate = LocalDate.now().minus(1, ChronoUnit.WEEKS);
+                    endDate = LocalDate.now();
+                    displayDate = "Last Week";
+                    break;
+                case "Last Month":
+                    startDate = LocalDate.now().minus(1, ChronoUnit.MONTHS);
+                    endDate = LocalDate.now();
+                    displayDate = "Last Month";
+                    break;
+                case "Last Year":
+                    startDate = LocalDate.now().minus(1, ChronoUnit.YEARS);
+                    endDate = LocalDate.now();
+                    displayDate = "Last Year";
+                    break;
+                case "All Time":
+                default:
+                    startDate = null;
+                    endDate = null;
+                    break;
+            }
+        }
+
+        String query = "SELECT date, description, amount FROM transactions WHERE user_id = ?";
+        if (startDate != null) {
+            query += " AND date >= '" + startDate + "'";
+        }
+        if (endDate != null) {
+            query += " AND date <= '" + endDate + "'";
+        }
+        if (transactionType != null && !transactionType.equals("All")) {
+            if (transactionType.equals("Debit")) {
+                query += " AND amount > 0";
+            } else if (transactionType.equals("Credit")) {
+                query += " AND amount < 0";
+            } else if (transactionType.equals("Loan")) {
+                query += " AND description = 'Loan'";
+            } else if (transactionType.equals("Savings")) {
+                query += " AND description = 'Savings'";
+            }
+        }
+        if (!minAmountStr.isEmpty()) {
+            query += " AND amount >= " + Double.parseDouble(minAmountStr);
+        }
+        if (!maxAmountStr.isEmpty()) {
+            query += " AND amount <= " + Double.parseDouble(maxAmountStr);
+        }
+        if (sortOption != null) {
+            switch (sortOption) {
+                case "Date Ascending":
+                    query += " ORDER BY date ASC";
+                    break;
+                case "Date Descending":
+                    query += " ORDER BY date DESC";
+                    break;
+                case "Amount Ascending":
+                    query += " ORDER BY amount ASC";
+                    break;
+                case "Amount Descending":
+                    query += " ORDER BY amount DESC";
+                    break;
+            }
+        }
+
+        try (Connection connection = ledgerDB.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                double runningBalance = 0.0;
+                while (rs.next()) {
+                    String date = rs.getString("date");
+                    String description = rs.getString("description");
+                    double amount = rs.getDouble("amount");
+                    double debit = amount > 0 ? amount : 0;
+                    double credit = amount < 0 ? -amount : 0;
+                    runningBalance += amount;
+                    transactionTable.getItems().add(new Transaction(date, displayDate, description, debit, credit, runningBalance));
                 }
             }
         } catch (SQLException e) {
@@ -75,34 +173,17 @@ public class HistoryController implements Initializable {
         }
     }
 
-    @FXML
-    private void openSpendingDistribution(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("SpendingDistributionPage.fxml"));
-            Parent root = loader.load();
-
-            SpendingDistributionController controller = loader.getController();
-            controller.setUserId(userId);
-            controller.loadSpendingDistribution();
-
-            Stage stage = new Stage();
-            stage.setTitle("Spending Distribution");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static class Transaction {
         private final String date;
+        private final String displayDate;
         private final String description;
         private final double debit;
         private final double credit;
         private final double balance;
 
-        public Transaction(String date, String description, double debit, double credit, double balance) {
+        public Transaction(String date, String displayDate, String description, double debit, double credit, double balance) {
             this.date = date;
+            this.displayDate = displayDate;
             this.description = description;
             this.debit = debit;
             this.credit = credit;
@@ -111,6 +192,10 @@ public class HistoryController implements Initializable {
 
         public String getDate() {
             return date;
+        }
+
+        public String getDisplayDate() {
+            return displayDate;
         }
 
         public String getDescription() {

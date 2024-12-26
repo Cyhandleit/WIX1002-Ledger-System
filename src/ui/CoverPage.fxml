@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CoverPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #eaacc6;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CoverPageController">
    <top>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ledger System" wrappingWidth="260.75543212890625" BorderPane.alignment="CENTER">
          <font>
@@ -18,12 +18,12 @@
       </Text>
    </top>
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: #eaacc6; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="username" layoutX="200.0" layoutY="100.0" promptText="Username" />
-            <PasswordField fx:id="password" layoutX="200.0" layoutY="150.0" promptText="Password" />
-            <Button layoutX="250.0" layoutY="200.0" mnemonicParsing="false" onAction="#userLogIn" text="Login" />
-            <Label fx:id="registerLabel" layoutX="250.0" layoutY="250.0" text="Click here to register" textFill="BLUE" underline="true" onMouseClicked="#switchToRegisterPage" />
+            <TextField fx:id="username" layoutX="114.0" layoutY="103.0" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Username" AnchorPane.leftAnchor="114.0" AnchorPane.rightAnchor="114.0" />
+            <PasswordField fx:id="password" layoutX="114.0" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Password" />
+            <Button layoutX="163.0" layoutY="206.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#userLogIn" text="Login" />
+            <Label fx:id="registerLabel" layoutX="128.0" layoutY="264.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#switchToRegisterPage" text="Click here to register" textFill="BLUE" underline="true" />
             <Label fx:id="wrongLogIn" layoutX="200.0" layoutY="300.0" textFill="RED" />
          </children>
       </AnchorPane>

@@ -1,35 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.HistoryController">
    <children>
-      <ScrollPane prefHeight="200.0" prefWidth="500.0">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="500.0">
+      <BorderPane prefHeight="350.0" prefWidth="650.0">
+         <top>
+            <AnchorPane prefHeight="100.0" prefWidth="650.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="transactionTable" prefHeight="200.0" prefWidth="500.0">
-                    <columns>
-                      <TableColumn fx:id="dateColumn" prefWidth="99.99996572732925" text="Date" />
-                      <TableColumn fx:id="descriptionColumn" prefWidth="172.80006408691406" text="Description" />
-                      <TableColumn fx:id="debitColumn" prefWidth="70.0" text="Debit" />
-                      <TableColumn fx:id="creditColumn" prefWidth="70.0" text="Credit" />
-                      <TableColumn fx:id="balanceColumn" prefWidth="70.0" text="Balance" />
-                    </columns>
-                  </TableView>
-                  <Button layoutX="10.0" layoutY="220.0" mnemonicParsing="false" onAction="#openSpendingDistribution" text="View Spending Distribution" />
+                  <DatePicker fx:id="startDatePicker" layoutX="10.0" layoutY="10.0" promptText="Start Date" />
+                  <DatePicker fx:id="endDatePicker" layoutX="150.0" layoutY="10.0" promptText="End Date" />
+                  <ComboBox fx:id="transactionTypeComboBox" layoutX="290.0" layoutY="10.0" promptText="Transaction Type" />
+                  <ComboBox fx:id="dateRangeComboBox" layoutX="430.0" layoutY="10.0" promptText="Date Range" />
+                  <TextField fx:id="minAmountField" layoutX="10.0" layoutY="50.0" promptText="Min Amount" />
+                  <TextField fx:id="maxAmountField" layoutX="150.0" layoutY="50.0" promptText="Max Amount" />
+                  <ComboBox fx:id="sortComboBox" layoutX="290.0" layoutY="50.0" promptText="Sort By" />
+                  <Button layoutX="430.0" layoutY="50.0" mnemonicParsing="false" onAction="#applyFiltersAndSort" text="Apply" />
                </children>
             </AnchorPane>
-        </content>
-      </ScrollPane>
+         </top>
+         <center>
+            <ScrollPane prefHeight="400.0" prefWidth="650.0" BorderPane.alignment="CENTER">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0">
+                     <children>
+                        <TableView fx:id="transactionTable" prefHeight="209.0" prefWidth="485.0">
+                           <columns>
+                              <TableColumn fx:id="dateColumn" prefWidth="99.99996572732925" text="Date" />
+                              <TableColumn fx:id="descriptionColumn" prefWidth="172.80006408691406" text="Description" />
+                              <TableColumn fx:id="debitColumn" prefWidth="70.0" text="Debit" />
+                              <TableColumn fx:id="creditColumn" prefWidth="70.0" text="Credit" />
+                              <TableColumn fx:id="balanceColumn" prefWidth="70.0" text="Balance" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
    </children>
 </HBox>

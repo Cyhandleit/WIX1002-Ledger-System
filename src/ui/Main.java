@@ -29,7 +29,6 @@ public class Main extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("CoverPage.fxml"));
             Scene scene = new Scene(root);
-
             stage.setScene(scene);
             stage.show();
 

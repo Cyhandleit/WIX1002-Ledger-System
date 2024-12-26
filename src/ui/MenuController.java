@@ -89,12 +89,6 @@ public class MenuController implements Initializable {
             } else if (page.equals("DebitPage")) {
                 DebitController debitController = loader.getController();
                 debitController.setUserId(userId);
-                SavingsController savingsController = getSavingsController();
-                if (savingsController != null) {
-                    debitController.setSavingsController(savingsController);
-                } else {
-                    System.err.println("Failed to initialize SavingsController.");
-                }
             } else if (page.equals("CreditPage")) {
                 CreditController creditController = loader.getController();
                 creditController.setUserId(userId);
@@ -104,6 +98,7 @@ public class MenuController implements Initializable {
             } else if (page.equals("HistoryPage")) {
                 HistoryController historyController = loader.getController();
                 historyController.setUserId(userId);
+                System.out.println("HistoryPage loaded with userId: " + userId);
             } else if (page.equals("CreditLoanPage")) {
                 CreditLoanController creditLoanController = loader.getController();
                 creditLoanController.setUserId(userId);
@@ -117,17 +112,6 @@ public class MenuController implements Initializable {
         }
 
         bp.setCenter(root);
-    }
-
-    private SavingsController getSavingsController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("SavingsPage.fxml"));
-            loader.load();
-            return loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private Stage stage;

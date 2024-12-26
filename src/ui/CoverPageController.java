@@ -12,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -86,7 +88,10 @@ public class CoverPageController {
                 menuController.displayName(inputUsername, resultSet.getString("email"), inputPassword);
 
                 // Pass the user_id to the MenuController
-                menuController.setUserId(resultSet.getInt("user_id"));
+                int userId = resultSet.getInt("user_id");
+                menuController.setUserId(userId);
+
+                checkLoanRepaymentReminder(userId);
 
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(root);
@@ -106,6 +111,26 @@ public class CoverPageController {
             System.err.println("FXML loading error: " + e.getMessage());
             e.printStackTrace();
             wrongLogIn.setText("FXML loading error occurred!");
+        }
+    }
+
+    private void checkLoanRepaymentReminder(int userId) {
+        try (Connection connection = ledgerDB.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(
+                     "SELECT COUNT(*) AS due_loans FROM loans WHERE user_id = ? AND due_date <= CURDATE() + INTERVAL 7 DAY")) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt("due_loans") > 0) {
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Loan Repayment Reminder");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You have upcoming loan repayments due within the next 7 days.");
+                    alert.showAndWait();
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

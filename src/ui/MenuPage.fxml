@@ -10,7 +10,7 @@
 
 <BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MenuController">
    <left>
-      <VBox prefHeight="365.0" prefWidth="70.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="365.0" prefWidth="120.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onMouseClicked="#AccountPage" prefHeight="40.0" prefWidth="120.0" text="Account" textAlignment="CENTER" />
             <Button mnemonicParsing="false" onMouseClicked="#DebitPage" prefHeight="40.0" prefWidth="120.0" text="Debit" textAlignment="CENTER" />
@@ -25,7 +25,7 @@
    <center>
       <AnchorPane fx:id="ap" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Text layoutX="162.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu Page">
+            <Text layoutX="200.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu Page">
                <font>
                   <Font size="30.0" />
                </font>
@@ -36,8 +36,8 @@
    <top>
       <AnchorPane prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="WelcomeLabel" layoutX="300.0" layoutY="12.0" text="Welcome" />
-            <Button layoutX="502.0" layoutY="5.0" mnemonicParsing="false" onAction="#switchToCoverPage" text="Log Out" />
+            <Label fx:id="WelcomeLabel" layoutX="250.0" layoutY="10.0" text="Welcome" />
+            <Button layoutX="500.0" layoutY="5.0" mnemonicParsing="false" onAction="#switchToCoverPage" text="Log Out" />
          </children>
       </AnchorPane>
    </top>

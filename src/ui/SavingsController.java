@@ -36,8 +36,30 @@ public class SavingsController {
         try {
             savingsPercentage = Double.parseDouble(SavingsTextField.getText());
             System.out.println("Savings percentage set to: " + savingsPercentage + "%");
+            updateSavings();
         } catch (NumberFormatException e) {
             System.out.println("Invalid savings percentage: " + e.getMessage());
+        }
+    }
+
+    private void updateSavings() {
+        try (Connection connection = ledgerDB.getConnection()) {
+            connection.setAutoCommit(false);
+
+            // Deduct savings percentage from balance and add to savings
+            try (PreparedStatement transferStmt = connection.prepareStatement(
+                    "UPDATE accounts SET savings = savings + (balance * ? / 100), balance = balance - (balance * ? / 100) WHERE user_id = ?")) {
+                transferStmt.setDouble(1, savingsPercentage);
+                transferStmt.setDouble(2, savingsPercentage);
+                transferStmt.setInt(3, userId);
+                transferStmt.executeUpdate();
+            }
+
+            connection.commit();
+            System.out.println("Savings updated successfully.");
+        } catch (SQLException e) {
+            System.out.println("Failed to update savings: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -48,7 +70,6 @@ public class SavingsController {
     public void autoTransferSavings() {
         LocalDate today = LocalDate.now();
         LocalDate lastDayOfMonth = today.with(TemporalAdjusters.lastDayOfMonth());
-        LocalDate firstDayOfNextMonth = today.with(TemporalAdjusters.firstDayOfNextMonth());
 
         if (today.equals(lastDayOfMonth)) {
             try (Connection connection = ledgerDB.getConnection()) {
@@ -64,26 +85,10 @@ public class SavingsController {
                 }
 
                 // Record the savings deduction transaction
-                try (PreparedStatement transactionStmt = connection.prepareStatement(
-                        "INSERT INTO transactions (user_id, amount, description, date) VALUES (?, ?, ?, ?)")) {
-                    double savingsAmount = getBalance() * savingsPercentage / 100;
-                    transactionStmt.setInt(1, userId);
-                    transactionStmt.setDouble(2, -savingsAmount); // Record as negative amount
-                    transactionStmt.setString(3, "Savings Deduction");
-                    transactionStmt.setDate(4, java.sql.Date.valueOf(today));
-                    transactionStmt.executeUpdate();
-                }
+                TransactionUtils.recordTransaction(userId, -getBalance() * savingsPercentage / 100, "Savings Deduction");
 
                 // Record the savings addition transaction for the next month
-                try (PreparedStatement transactionStmt = connection.prepareStatement(
-                        "INSERT INTO transactions (user_id, amount, description, date) VALUES (?, ?, ?, ?)")) {
-                    double savingsAmount = getBalance() * savingsPercentage / 100;
-                    transactionStmt.setInt(1, userId);
-                    transactionStmt.setDouble(2, savingsAmount); // Record as positive amount
-                    transactionStmt.setString(3, "Savings Addition");
-                    transactionStmt.setDate(4, java.sql.Date.valueOf(firstDayOfNextMonth));
-                    transactionStmt.executeUpdate();
-                }
+                TransactionUtils.recordTransaction(userId, getBalance() * savingsPercentage / 100, "Savings Addition");
 
                 connection.commit();
                 System.out.println("Savings auto-transferred to balance.");

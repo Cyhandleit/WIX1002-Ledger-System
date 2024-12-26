@@ -5,7 +5,11 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 
 public class InterestPredictionController {
 
@@ -23,6 +27,16 @@ public class InterestPredictionController {
     private BarChart<String, Number> interestBarChart;
     @FXML
     private ChoiceBox<String> periodChoiceBox;
+    @FXML
+    private TextField principalAmountField;
+    @FXML
+    private TextField interestRateField;
+    @FXML
+    private TextField timePeriodField;
+    @FXML
+    private TextField predictedInterestField;
+    @FXML
+    private Button calculateButton;
 
     private double dailyInterest;
     private double monthlyInterest;
@@ -32,15 +46,16 @@ public class InterestPredictionController {
     private void initialize() {
         periodChoiceBox.setItems(FXCollections.observableArrayList("Daily", "Monthly", "Annually"));
         periodChoiceBox.setOnAction(event -> updateGraph());
+        calculateButton.setOnAction(this::calculateInterest);
     }
 
     public void setInterestData(String bank, double interestRate, double balance) {
         bankLabel.setText("Bank: " + bank);
         interestRateLabel.setText(String.format("Interest Rate: %.2f%%", interestRate));
 
-        dailyInterest = (balance * interestRate) / 365;
-        monthlyInterest = (balance * interestRate) / 12;
-        annuallyInterest = balance * interestRate;
+        dailyInterest = (balance * interestRate / 100) / 365;
+        monthlyInterest = (balance * interestRate / 100) / 12;
+        annuallyInterest = balance * interestRate / 100;
 
         dailyInterestLabel.setText(String.format("Daily Interest: %.2f", dailyInterest));
         monthlyInterestLabel.setText(String.format("Monthly Interest: %.2f", monthlyInterest));
@@ -50,6 +65,7 @@ public class InterestPredictionController {
         updateGraph();
     }
 
+    @FXML
     private void updateGraph() {
         interestBarChart.getData().clear();
         String selectedPeriod = periodChoiceBox.getValue();
@@ -60,21 +76,49 @@ public class InterestPredictionController {
         switch (selectedPeriod) {
             case "Daily":
                 for (int i = 1; i <= 7; i++) {
-                    series.getData().add(new XYChart.Data<>("Day " + i, dailyInterest * i));
+                    XYChart.Data<String, Number> data = new XYChart.Data<>("Day " + i, dailyInterest * i);
+                    series.getData().add(data);
+                    addTooltip(data);
                 }
                 break;
             case "Monthly":
                 for (int i = 1; i <= 12; i++) {
-                    series.getData().add(new XYChart.Data<>("Month " + i, monthlyInterest * i));
+                    XYChart.Data<String, Number> data = new XYChart.Data<>("Month " + i, monthlyInterest * i);
+                    series.getData().add(data);
+                    addTooltip(data);
                 }
                 break;
             case "Annually":
                 for (int i = 1; i <= 5; i++) {
-                    series.getData().add(new XYChart.Data<>("Year " + i, annuallyInterest * i));
+                    XYChart.Data<String, Number> data = new XYChart.Data<>("Year " + i, annuallyInterest * i);
+                    series.getData().add(data);
+                    addTooltip(data);
                 }
                 break;
         }
 
         interestBarChart.getData().add(series);
+    }
+
+    @FXML
+    private void addTooltip(XYChart.Data<String, Number> data) {
+        Tooltip tooltip = new Tooltip(String.format("%s: %.2f", data.getXValue(), data.getYValue().doubleValue()));
+        Tooltip.install(data.getNode(), tooltip);
+    }
+
+    @FXML
+    private void calculateInterest(ActionEvent event) {
+        try {
+            double principal = Double.parseDouble(principalAmountField.getText());
+            double interestRate = Double.parseDouble(interestRateField.getText());
+            double timePeriod = Double.parseDouble(timePeriodField.getText());
+
+            double interest = principal * (interestRate / 100) * timePeriod;
+            predictedInterestField.setText(String.format("%.2f", interest));
+            System.out.println("Interest calculated: " + interest);
+        } catch (NumberFormatException e) {
+            predictedInterestField.setText("Invalid input");
+            System.err.println("Invalid input for interest calculation: " + e.getMessage());
+        }
     }
 }
