@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -9,37 +8,53 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CoverPageController">
-   <center>
-      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0.0% 25.6629% to 100.0% 100.0%, #00b8ff 0.0%, #ffffff 100.0%); -fx-border-color: #000000;" BorderPane.alignment="CENTER">
+<VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: linear-gradient(from 0.0% 25.6629% to 100.0% 100.0%, #00b8ff 0.0%, #ffffff 100.0%);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CoverPageController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
-            <VBox alignment="CENTER" layoutX="224.0" layoutY="81.0" spacing="10">
-               <ImageView fitHeight="65.0" fitWidth="68.0">
-                  <image>
-                     <Image url="@image/user_icons.png" />
-                  </image>
-                  <viewport>
-                     <Rectangle2D />
-                  </viewport>
-               </ImageView>
-               <TextField fx:id="username" promptText="Username" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
-                  <effect>
-                     <ColorAdjust brightness="0.06" contrast="1.0" />
-                  </effect>
-               </TextField>
-               <PasswordField fx:id="password" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
-                  <effect>
-                     <ColorAdjust contrast="1.0" />
-                  </effect>
-               </PasswordField>
-               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#userLogIn" style="-fx-background-color: #0598ff;" text="Login" textAlignment="CENTER" textFill="WHITE" />
-               <Label fx:id="registerLabel" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#switchToRegisterPage" text="Click here to register" textAlignment="CENTER" textFill="#0598ff" underline="true" />
-               <Label fx:id="wrongLogIn" textFill="RED" />
+            <ImageView fitHeight="65.0" fitWidth="68.0">
+               <image>
+                  <Image url="@image/user_icons.png" />
+               </image>
+            </ImageView>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <children>
+                  <AnchorPane prefHeight="30.0" />
+               </children>
+            </VBox>
+            <Label fx:id="wrongLogIn" textFill="RED" />
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <children>
+            <TextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="Username" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
+               <effect>
+                  <ColorAdjust brightness="0.06" contrast="1.0" />
+               </effect>
+            </TextField>
+            <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
+               <effect>
+                  <ColorAdjust contrast="1.0" />
+               </effect>
+            </PasswordField>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <children>
+                  <AnchorPane prefHeight="50.0" />
+               </children>
             </VBox>
          </children>
-      </AnchorPane>
-   </center>
-</BorderPane>
+      </VBox>
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <children>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#userLogIn" style="-fx-background-color: #0598ff;" text="Login" textAlignment="CENTER" textFill="WHITE" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Label fx:id="registerLabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#switchToRegisterPage" text="Click here to register" textAlignment="CENTER" textFill="#0598ff" underline="true" />
+         </children>
+      </VBox>
+   </children>
+</VBox>

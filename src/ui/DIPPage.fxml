@@ -4,46 +4,29 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.DIPController">
+<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.DIPController">
    <children>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <BorderPane prefHeight="400.0" prefWidth="600.0">
-               <top>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="This is DIP Page" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-               </top>
-               <center>
-                  <AnchorPane prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <VBox alignment="CENTER" layoutX="50.0" layoutY="50.0" spacing="10">
-                           <Text text="Deposit Interest Predictor">
-                              <font>
-                                 <Font size="20.0" />
-                              </font>
-                           </Text>
-                           <Text text="Choose the bank :">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </Text>
-                           <ChoiceBox fx:id="bankChoiceBox" prefWidth="150.0" />
-                           <Button fx:id="checkButton" mnemonicParsing="false" onAction="#checkInterest" text="Check" />
-                           <Label fx:id="resultLabel" textFill="RED" />
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-               </center>
-            </BorderPane>
+            <AnchorPane>
+               <children>
+                  <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10">
+                     <Text text="Choose the bank :">
+                        <font>
+                           <Font size="20.0" />
+                        </font>
+                     </Text>
+                     <ChoiceBox fx:id="bankChoiceBox" prefWidth="200.0" />
+                     <Button fx:id="checkButton" mnemonicParsing="false" onAction="#checkInterest" text="Check" />
+                     <Label fx:id="resultLabel" textFill="RED" />
+                  </VBox>
+               </children>
+            </AnchorPane>
          </children>
       </HBox>
    </children>

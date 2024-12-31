@@ -67,9 +67,6 @@ public class CreditLoanController {
                     loanStmt.executeUpdate();
                 }
 
-                // Insert the loan transaction into the transactions table
-                TransactionUtils.recordTransaction(userId, principal, "Loan");
-
                 connection.commit(); // Commit transaction
 
                 statusLabel.setText("Loan applied successfully!");
@@ -97,9 +94,6 @@ public class CreditLoanController {
                     loanStmt.setInt(2, userId);
                     loanStmt.executeUpdate();
                 }
-
-                // Insert the repayment transaction into the transactions table
-                TransactionUtils.recordTransaction(userId, -repayAmount, "Loan Repayment");
 
                 connection.commit(); // Commit transaction
 

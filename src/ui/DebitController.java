@@ -20,6 +20,11 @@ public class DebitController {
 
     @FXML
     private void submit(ActionEvent event) {
+        if (TransactionUtils.hasOverdueLoan(userId)) {
+            System.err.println("Transaction denied: User has overdue loans.");
+            return;
+        }
+
         try {
             double debit = Double.parseDouble(DebitAmount.getText());
             String desc = DescTextField.getText();

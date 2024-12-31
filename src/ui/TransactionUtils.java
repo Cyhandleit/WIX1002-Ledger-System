@@ -2,12 +2,18 @@ package ui;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class TransactionUtils {
 
     public static void recordTransaction(int userId, double amount, String description) {
+        if (hasOverdueLoan(userId)) {
+            System.out.println("Transaction denied: User has overdue loans.");
+            return;
+        }
+
         LocalDate date = LocalDate.now();
 
         try (Connection connection = ledgerDB.getConnection()) {
@@ -55,5 +61,23 @@ public class TransactionUtils {
             System.err.println("Transaction failed: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static boolean hasOverdueLoan(int userId) {
+        try (Connection connection = ledgerDB.getConnection()) {
+            String query = "SELECT COUNT(*) AS overdue_count FROM loans WHERE user_id = ? AND due_date < CURDATE() AND total_repayment > 0";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt("overdue_count") > 0;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 }

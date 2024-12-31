@@ -30,6 +30,9 @@ public class Main extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("CoverPage.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.setWidth(600);
+            stage.setHeight(400);
+            // stage.setResizable(false); // Disable resizing
             stage.show();
 
             scheduleSavingsTransfer();
