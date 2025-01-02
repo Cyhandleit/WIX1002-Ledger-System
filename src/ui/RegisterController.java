@@ -45,73 +45,42 @@ public class RegisterController {
     }
 
     @FXML
-    private void registerUser(ActionEvent event) {
+    public void registerUser(ActionEvent event) {
         String username = usernameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        // Validate input fields
         if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            statusLabel.setText("All fields are required.");
+            statusLabel.setText("Please fill in all fields.");
             return;
         }
 
         try (Connection connection = ledgerDB.getConnection()) {
-            // Check if the username or email already exists
-            String checkQuery = "SELECT user_id FROM users WHERE username = ? OR email = ?";
-            try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
-                checkStmt.setString(1, username);
-                checkStmt.setString(2, email);
-                try (ResultSet rs = checkStmt.executeQuery()) {
-                    if (rs.next()) {
-                        statusLabel.setText("Username or email already exists.");
-                        return;
-                    }
-                }
+            String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setString(1, username);
+                stmt.setString(2, email);
+                stmt.setString(3, password);
+                stmt.executeUpdate();
             }
 
-            // Insert the new user into the users table
-            String insertQuery = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-            try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                insertStmt.setString(1, username);
-                insertStmt.setString(2, email);
-                insertStmt.setString(3, password);
-                insertStmt.executeUpdate();
-
-                try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int userId = generatedKeys.getInt(1);
-                        // Use the userId for further processing, e.g., initializing the account
-                        initializeAccount(userId);
-                    }
-                }
-            }
+            // Initialize account with default values
+            initializeAccount(connection, username);
 
             statusLabel.setText("Registration successful!");
-            switchToCoverPage(event); // Automatically switch to cover page after successful registration
+            switchToCoverPage(event);
 
         } catch (SQLException | IOException e) {
-            statusLabel.setText("Database error: " + e.getMessage());
+            statusLabel.setText("Registration failed: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void initializeAccount(int userId) {
-        try (Connection connection = ledgerDB.getConnection()) {
-            String accountQuery = "INSERT INTO accounts (user_id, balance, loan) VALUES (?, 0.00, 0.00)";
-            try (PreparedStatement accountStmt = connection.prepareStatement(accountQuery)) {
-                accountStmt.setInt(1, userId);
-                accountStmt.executeUpdate();
-            }
-
-            String savingsQuery = "INSERT INTO savings (user_id, amount, interest_rate) VALUES (?, 0.00, 0.00)";
-            try (PreparedStatement savingsStmt = connection.prepareStatement(savingsQuery)) {
-                savingsStmt.setInt(1, userId);
-                savingsStmt.executeUpdate();
-            }
-        } catch (SQLException e) {
-            System.err.println("Failed to initialize account: " + e.getMessage());
-            e.printStackTrace();
+    private void initializeAccount(Connection connection, String username) throws SQLException {
+        String query = "INSERT INTO accounts (user_id, balance, savings) VALUES ((SELECT user_id FROM users WHERE username = ?), 0.0, 0.0)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
         }
     }
 }

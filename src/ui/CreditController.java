@@ -30,7 +30,7 @@ public class CreditController {
         try {
             double credit = Double.parseDouble(CreditAmount.getText());
             String desc = DescTextField.getText();
-            TransactionUtils.recordTransaction(userId, -credit, desc);
+            TransactionUtils.recordCreditTransaction(userId, credit, desc);
         } catch (NumberFormatException e) {
             System.err.println("Invalid credit amount: " + e.getMessage());
         }

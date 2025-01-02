@@ -54,7 +54,7 @@
                                  </font>
                               </Label>
                            </HBox>
-                           <PieChart fx:id="spendingDistributionChart" prefHeight="200.0" prefWidth="560.0" />
+                           <PieChart fx:id="spendingDistributionChart" prefHeight="300.0" prefWidth="600.0" />
                         </VBox>
                      </children>
                   </AnchorPane>

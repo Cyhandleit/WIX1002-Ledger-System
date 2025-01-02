@@ -24,9 +24,8 @@ public class AccountController {
     @FXML
     private PieChart spendingDistributionChart;
 
-    private int userId; // Store the user ID of the logged-in user
+    private int userId;
 
-    // Method to set the user ID (called from the MenuController)
     @FXML
     public void setUserId(int userId) {
         this.userId = userId;
@@ -37,11 +36,11 @@ public class AccountController {
     @FXML
     public void loadAccountDetails() {
         try (Connection connection = ledgerDB.getConnection()) {
-            // Retrieve balance and savings amounts from the accounts table
             double balance = 0.0;
             double savings = 0.0;
             double totalLoanAmount = 0.0;
 
+            // Fetch balance and savings
             try (PreparedStatement stmt = connection.prepareStatement(
                     "SELECT balance, savings FROM accounts WHERE user_id = ?")) {
                 stmt.setInt(1, userId);
@@ -53,7 +52,7 @@ public class AccountController {
                 }
             }
 
-            // Calculate the total loan amount after interest
+            // Fetch total loan amount
             try (PreparedStatement loanStmt = connection.prepareStatement(
                     "SELECT SUM(total_repayment) AS total_loan_amount FROM loans WHERE user_id = ? AND total_repayment > 0")) {
                 loanStmt.setInt(1, userId);
@@ -64,6 +63,7 @@ public class AccountController {
                 }
             }
 
+            // Display the fetched data
             displayAccount(balance, savings, totalLoanAmount);
 
         } catch (SQLException e) {
@@ -74,9 +74,9 @@ public class AccountController {
 
     @FXML
     public void displayAccount(double balance, double savings, double loan) {
-        BalanceLabel.setText(String.format("%.2f", balance));
-        SavingsLabel.setText(String.format("%.2f", savings));
-        LoanLabel.setText(String.format("%.2f", loan));
+        BalanceLabel.setText(String.format("RM%.2f", balance));
+        SavingsLabel.setText(String.format("RM%.2f", savings));
+        LoanLabel.setText(String.format("RM%.2f", loan));
     }
 
     @FXML
@@ -104,7 +104,7 @@ public class AccountController {
                                 break;
                             default:
                                 if (totalAmount < 0) {
-                                    totalCredit += totalAmount;
+                                    totalCredit += Math.abs(totalAmount);
                                 } else {
                                     totalDebit += totalAmount;
                                 }
@@ -119,18 +119,20 @@ public class AccountController {
         }
 
         spendingDistributionChart.getData().clear();
-        addPieChartData("Debit", Math.abs(totalDebit), totalDebit + totalCredit + totalSavings + totalLoan);
-        addPieChartData("Credit", Math.abs(totalCredit), totalDebit + totalCredit + totalSavings + totalLoan);
-        addPieChartData("Savings", Math.abs(totalSavings), totalDebit + totalCredit + totalSavings + totalLoan);
-        addPieChartData("Loan", Math.abs(totalLoan), totalDebit + totalCredit + totalSavings + totalLoan);
+        addPieChartData("Debit", totalDebit, totalDebit + totalCredit + totalSavings + totalLoan);
+        addPieChartData("Credit", totalCredit, totalDebit + totalCredit + totalSavings + totalLoan);
+        addPieChartData("Savings", totalSavings, totalDebit + totalCredit + totalSavings + totalLoan);
+        addPieChartData("Loan", totalLoan, totalDebit + totalCredit + totalSavings + totalLoan);
     }
 
     @FXML
     private void addPieChartData(String name, double value, double total) {
-        PieChart.Data data = new PieChart.Data(name, value);
-        spendingDistributionChart.getData().add(data);
-        double percentage = (value / total) * 100;
-        Tooltip tooltip = new Tooltip(String.format("%s: %.2f (%.2f%%)", name, value, percentage));
-        Tooltip.install(data.getNode(), tooltip);
+        if (total > 0) {
+            PieChart.Data data = new PieChart.Data(name, value);
+            spendingDistributionChart.getData().add(data);
+            double percentage = (value / total) * 100;
+            Tooltip tooltip = new Tooltip(String.format("%s: $%.2f (%.2f%%)", name, value, percentage));
+            Tooltip.install(data.getNode(), tooltip);
+        }
     }
 }

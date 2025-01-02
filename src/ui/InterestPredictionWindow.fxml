@@ -3,7 +3,6 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,7 +15,7 @@
       <Label fx:id="monthlyInterestLabel" layoutX="20.0" layoutY="110.0" text="Monthly Interest: " />
       <Label fx:id="annuallyInterestLabel" layoutX="20.0" layoutY="140.0" text="Annually Interest: " />
       <ChoiceBox fx:id="periodChoiceBox" layoutX="20.0" layoutY="170.0" prefWidth="200.0" />
-      <BarChart fx:id="interestBarChart" layoutX="20.0" layoutY="210.0" prefHeight="150.0" prefWidth="560.0">
+      <BarChart fx:id="interestBarChart" layoutX="20.0" layoutY="210.0" prefHeight="258.0" prefWidth="560.0">
          <xAxis>
             <CategoryAxis label="Period" />
          </xAxis>
@@ -24,6 +23,5 @@
             <NumberAxis label="Interest" />
          </yAxis>
       </BarChart>
-      <Button fx:id="calculateButton" layoutX="20.0" layoutY="370.0" text="Calculate" />
    </children>
 </AnchorPane>

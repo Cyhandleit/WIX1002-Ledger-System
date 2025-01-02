@@ -15,13 +15,14 @@
             <AnchorPane prefHeight="200.0" prefWidth="400.0">
                <children>
                   <VBox alignment="CENTER" layoutX="50.0" layoutY="50.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10">
-                     <Text text="Enter the savings amount :">
+                     <Text text="Enter the savings percentage (0-100):">
                         <font>
                            <Font size="20.0" />
                         </font>
                      </Text>
-                     <TextField fx:id="SavingsTextField" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#setSavingsPercentage" prefHeight="30.0" prefWidth="300.0" promptText="The amount will deduct from the next debit" />
-                     <Button fx:id="ConfirmButton" mnemonicParsing="false" onAction="#setSavingsPercentage" text="Confirm" />
+                     <TextField fx:id="SavingsTextField" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="300.0" promptText="Enter percentage (0-100)" />
+                     <Button fx:id="activateButton" mnemonicParsing="false" onAction="#activateSavings" text="Activate Savings" />
+                     <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelSavings" text="Cancel Savings" style="-fx-background-color: #ff4444;" />
                   </VBox>
                </children>
             </AnchorPane>

@@ -6,10 +6,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
 
 public class InterestPredictionController {
 
@@ -27,16 +25,6 @@ public class InterestPredictionController {
     private BarChart<String, Number> interestBarChart;
     @FXML
     private ChoiceBox<String> periodChoiceBox;
-    @FXML
-    private TextField principalAmountField;
-    @FXML
-    private TextField interestRateField;
-    @FXML
-    private TextField timePeriodField;
-    @FXML
-    private TextField predictedInterestField;
-    @FXML
-    private Button calculateButton;
 
     private double dailyInterest;
     private double monthlyInterest;
@@ -46,7 +34,6 @@ public class InterestPredictionController {
     private void initialize() {
         periodChoiceBox.setItems(FXCollections.observableArrayList("Daily", "Monthly", "Annually"));
         periodChoiceBox.setOnAction(event -> updateGraph());
-        calculateButton.setOnAction(this::calculateInterest);
     }
 
     public void setInterestData(String bank, double interestRate, double balance) {
@@ -104,21 +91,5 @@ public class InterestPredictionController {
     private void addTooltip(XYChart.Data<String, Number> data) {
         Tooltip tooltip = new Tooltip(String.format("%s: %.2f", data.getXValue(), data.getYValue().doubleValue()));
         Tooltip.install(data.getNode(), tooltip);
-    }
-
-    @FXML
-    private void calculateInterest(ActionEvent event) {
-        try {
-            double principal = Double.parseDouble(principalAmountField.getText());
-            double interestRate = Double.parseDouble(interestRateField.getText());
-            double timePeriod = Double.parseDouble(timePeriodField.getText());
-
-            double interest = principal * (interestRate / 100) * timePeriod;
-            predictedInterestField.setText(String.format("%.2f", interest));
-            System.out.println("Interest calculated: " + interest);
-        } catch (NumberFormatException e) {
-            predictedInterestField.setText("Invalid input");
-            System.err.println("Invalid input for interest calculation: " + e.getMessage());
-        }
     }
 }

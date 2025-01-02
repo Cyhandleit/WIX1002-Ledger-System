@@ -25,6 +25,8 @@ public class HistoryController implements Initializable {
     @FXML
     private TableColumn<Transaction, String> dateColumn;
     @FXML
+    private TableColumn<Transaction, String> timeColumn;
+    @FXML
     private TableColumn<Transaction, String> descriptionColumn;
     @FXML
     private TableColumn<Transaction, Double> debitColumn;
@@ -59,7 +61,8 @@ public class HistoryController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resources) {
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("displayDate"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         debitColumn.setCellValueFactory(new PropertyValueFactory<>("debit"));
         creditColumn.setCellValueFactory(new PropertyValueFactory<>("credit"));
@@ -112,7 +115,7 @@ public class HistoryController implements Initializable {
             }
         }
 
-        String query = "SELECT date, description, amount FROM transactions WHERE user_id = ?";
+        String query = "SELECT date, time, description, amount FROM transactions WHERE user_id = ?";
         if (startDate != null) {
             query += " AND date >= '" + startDate + "'";
         }
@@ -139,10 +142,10 @@ public class HistoryController implements Initializable {
         if (sortOption != null) {
             switch (sortOption) {
                 case "Date Ascending":
-                    query += " ORDER BY date ASC";
+                    query += " ORDER BY date ASC, time ASC";
                     break;
                 case "Date Descending":
-                    query += " ORDER BY date DESC";
+                    query += " ORDER BY date DESC, time DESC";
                     break;
                 case "Amount Ascending":
                     query += " ORDER BY amount ASC";
@@ -160,12 +163,13 @@ public class HistoryController implements Initializable {
                 double runningBalance = 0.0;
                 while (rs.next()) {
                     String date = rs.getString("date");
+                    String time = rs.getString("time");
                     String description = rs.getString("description");
                     double amount = rs.getDouble("amount");
                     double debit = amount > 0 ? amount : 0;
                     double credit = amount < 0 ? -amount : 0;
                     runningBalance += amount;
-                    transactionTable.getItems().add(new Transaction(date, displayDate, description, debit, credit, runningBalance));
+                    transactionTable.getItems().add(new Transaction(date, time, displayDate, description, debit, credit, runningBalance));
                 }
             }
         } catch (SQLException e) {
@@ -176,14 +180,16 @@ public class HistoryController implements Initializable {
 
     public static class Transaction {
         private final String date;
+        private final String time;
         private final String displayDate;
         private final String description;
         private final double debit;
         private final double credit;
         private final double balance;
 
-        public Transaction(String date, String displayDate, String description, double debit, double credit, double balance) {
+        public Transaction(String date, String time, String displayDate, String description, double debit, double credit, double balance) {
             this.date = date;
+            this.time = time;
             this.displayDate = displayDate;
             this.description = description;
             this.debit = debit;
@@ -193,6 +199,10 @@ public class HistoryController implements Initializable {
 
         public String getDate() {
             return date;
+        }
+
+        public String getTime() {
+            return time;
         }
 
         public String getDisplayDate() {

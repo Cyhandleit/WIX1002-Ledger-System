@@ -17,19 +17,20 @@
    <children>
       <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
          <children>
-            <BorderPane>
+            <BorderPane prefHeight="400.0" prefWidth="600.0">
                <center>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
                      <children>
                         <ScrollPane prefHeight="402.0" prefWidth="580.0">
                            <content>
-                              <TableView fx:id="transactionTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                              <TableView fx:id="transactionTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="580.0">
                                  <columns>
-                                    <TableColumn fx:id="dateColumn" prefWidth="100.0" text="Date" />
-                                    <TableColumn fx:id="descriptionColumn" prefWidth="220.0" text="Description" />
-                                    <TableColumn fx:id="debitColumn" text="Debit" />
-                                    <TableColumn fx:id="creditColumn" text="Credit" />
-                                    <TableColumn fx:id="balanceColumn" prefWidth="113.5999816894531" text="Balance" />
+                                    <TableColumn fx:id="dateColumn" prefWidth="75.1999779343605" text="Date" />
+                                    <TableColumn fx:id="timeColumn" prefWidth="64.79998779296875" text="Time" />
+                                    <TableColumn fx:id="descriptionColumn" prefWidth="180.00001525878906" text="Description" />
+                                    <TableColumn fx:id="debitColumn" prefWidth="74.39996337890625" text="Debit" />
+                                    <TableColumn fx:id="creditColumn" prefWidth="75.2000732421875" text="Credit" />
+                                    <TableColumn fx:id="balanceColumn" minWidth="6.39996337890625" prefWidth="95.199951171875" text="Balance" />
                                  </columns>
                               </TableView>
                            </content>

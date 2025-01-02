@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class TransactionUtils {
 
@@ -15,52 +16,44 @@ public class TransactionUtils {
         }
 
         LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
 
         try (Connection connection = ledgerDB.getConnection()) {
-            connection.setAutoCommit(false); // Start transaction
+            connection.setAutoCommit(false);
 
-            // Insert the transaction into the transactions table
+            // Insert transaction
             try (PreparedStatement transactionStmt = connection.prepareStatement(
-                    "INSERT INTO transactions (user_id, amount, description, date) VALUES (?, ?, ?, ?)")) {
+                    "INSERT INTO transactions (user_id, amount, description, date, time) VALUES (?, ?, ?, ?, ?)")) {
                 transactionStmt.setInt(1, userId);
                 transactionStmt.setDouble(2, amount);
                 transactionStmt.setString(3, description);
                 transactionStmt.setDate(4, java.sql.Date.valueOf(date));
+                transactionStmt.setTime(5, java.sql.Time.valueOf(time));
                 transactionStmt.executeUpdate();
             }
 
-            // Update the accounts table based on the transaction type
-            String updateQuery = "";
-            if (description.equalsIgnoreCase("Debit")) {
-                updateQuery = "UPDATE accounts SET balance = balance + ? WHERE user_id = ?";
-            } else if (description.equalsIgnoreCase("Credit")) {
-                updateQuery = "UPDATE accounts SET balance = balance - ? WHERE user_id = ?";
-            } else if (description.equalsIgnoreCase("Loan")) {
-                updateQuery = "UPDATE accounts SET balance = balance + ?, loan = loan + ? WHERE user_id = ?";
-            } else if (description.equalsIgnoreCase("Savings")) {
-                updateQuery = "UPDATE accounts SET savings = savings + ? WHERE user_id = ?";
-            } else {
-                updateQuery = "UPDATE accounts SET balance = balance + ? WHERE user_id = ?";
-            }
-
+            // Update account balance
+            String updateQuery = "UPDATE accounts SET balance = balance + ? WHERE user_id = ?";
             try (PreparedStatement accountStmt = connection.prepareStatement(updateQuery)) {
-                if (description.equalsIgnoreCase("Loan")) {
-                    accountStmt.setDouble(1, amount);
-                    accountStmt.setDouble(2, amount);
-                    accountStmt.setInt(3, userId);
-                } else {
-                    accountStmt.setDouble(1, amount);
-                    accountStmt.setInt(2, userId);
-                }
+                accountStmt.setDouble(1, amount);
+                accountStmt.setInt(2, userId);
                 accountStmt.executeUpdate();
             }
 
-            connection.commit(); // Commit transaction
+            connection.commit();
             System.out.println("Transaction recorded successfully.");
         } catch (SQLException e) {
             System.err.println("Transaction failed: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static void recordDebitTransaction(int userId, double amount, String description) {
+        recordTransaction(userId, amount, description);
+    }
+
+    public static void recordCreditTransaction(int userId, double amount, String description) {
+        recordTransaction(userId, -amount, description);
     }
 
     public static boolean hasOverdueLoan(int userId) {
