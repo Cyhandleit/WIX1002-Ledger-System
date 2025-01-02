@@ -18,8 +18,10 @@ import java.util.Map;
 
 public class DIPController {
 
+    @FXML
     private int userId;
 
+    @FXML
     public void setUserId(int userId) {
         this.userId = userId;
     }

@@ -16,7 +16,7 @@ public class LoanRepaymentsController {
 
     @FXML
     private PieChart overdueRepaymentsChart;
-
+    @FXML
     private int userId; // Store the user ID of the logged-in user
 
     public void setUserId(int userId) {

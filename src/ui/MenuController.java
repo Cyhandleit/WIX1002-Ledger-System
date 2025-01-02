@@ -75,6 +75,7 @@ public class MenuController implements Initializable {
         loadPage("DIPPage");
     }
 
+    @FXML
     private void loadPage(String page) {
         Parent root = null;
 

@@ -27,6 +27,7 @@ public class AccountController {
     private int userId; // Store the user ID of the logged-in user
 
     // Method to set the user ID (called from the MenuController)
+    @FXML
     public void setUserId(int userId) {
         this.userId = userId;
         loadAccountDetails();

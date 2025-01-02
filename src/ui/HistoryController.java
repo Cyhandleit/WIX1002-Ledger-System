@@ -75,6 +75,7 @@ public class HistoryController implements Initializable {
         loadTransactionHistory();
     }
 
+    @FXML
     private void loadTransactionHistory() {
         transactionTable.getItems().clear();
         LocalDate startDate = startDatePicker.getValue();

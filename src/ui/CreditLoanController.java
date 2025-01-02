@@ -32,10 +32,11 @@ public class CreditLoanController {
     private Button repayButton;
     @FXML
     private Label statusLabel;
-
+    @FXML
     private int userId; // Store the user ID of the logged-in user
 
     // Method to set the user ID (called from the MenuController)
+    @FXML
     public void setUserId(int userId) {
         this.userId = userId;
     }
@@ -46,6 +47,11 @@ public class CreditLoanController {
             double principal = Double.parseDouble(principalAmountField.getText());
             double interestRate = Double.parseDouble(interestRateField.getText());
             int repaymentPeriod = Integer.parseInt(repaymentPeriodField.getText());
+
+            if(principal < 0 || interestRate < 0 || repaymentPeriod < 0) {
+                statusLabel.setText("Invalid input: negative values not allowed");
+                return;
+            }
 
             double totalRepayment = principal + (principal * interestRate / 100);
             double monthlyInstallment = totalRepayment / repaymentPeriod;
