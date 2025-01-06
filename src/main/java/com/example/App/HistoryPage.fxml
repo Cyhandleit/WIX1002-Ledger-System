@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.App.HistoryController">
+   <children>
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
+         <children>
+            <BorderPane prefHeight="400.0" prefWidth="600.0">
+               <center>
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+                     <children>
+                        <ScrollPane prefHeight="402.0" prefWidth="580.0">
+                           <content>
+                              <TableView fx:id="transactionTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="580.0">
+                                 <columns>
+                                    <TableColumn fx:id="dateColumn" prefWidth="75.1999779343605" text="Date" />
+                                    <TableColumn fx:id="timeColumn" prefWidth="64.79998779296875" text="Time" />
+                                    <TableColumn fx:id="descriptionColumn" prefWidth="180.00001525878906" text="Description" />
+                                    <TableColumn fx:id="debitColumn" prefWidth="74.39996337890625" text="Debit" />
+                                    <TableColumn fx:id="creditColumn" prefWidth="75.2000732421875" text="Credit" />
+                                    <TableColumn fx:id="balanceColumn" minWidth="6.39996337890625" prefWidth="95.199951171875" text="Balance" />
+                                 </columns>
+                              </TableView>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+               </center>
+               <top>
+                  <AnchorPane BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10">
+                           <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10">
+                              <DatePicker fx:id="startDatePicker" prefHeight="26.0" prefWidth="160.0" promptText="Start Date" />
+                              <DatePicker fx:id="endDatePicker" prefHeight="26.0" prefWidth="160.0" promptText="End Date" />
+                              <ComboBox fx:id="transactionTypeComboBox" promptText="Transaction Type" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <ComboBox fx:id="dateRangeComboBox" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="110.0" promptText="Date Range" HBox.hgrow="ALWAYS" />
+                           </HBox>
+                           <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10">
+                              <TextField fx:id="minAmountField" promptText="Min Amount" />
+                              <TextField fx:id="maxAmountField" promptText="Max Amount" />
+                              <ComboBox fx:id="sortComboBox" promptText="Sort By" />
+                              <Button mnemonicParsing="false" onAction="#applyFiltersAndSort" text="Apply" />
+                           </HBox>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </top>
+            </BorderPane>
+         </children>
+      </HBox>
+   </children>
+</HBox>

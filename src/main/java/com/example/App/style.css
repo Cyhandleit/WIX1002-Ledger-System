@@ -1,0 +1,18 @@
+/* Correct CSS */
+.root {
+    -fx-background-color: #FFFFFF; /* Example of a correct background color */
+}
+
+.anchor-pane {
+    -fx-border-color: #000000; /* Example of a correct border color */
+}
+
+.button {
+    -fx-background-color: #0598ff;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+.label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}

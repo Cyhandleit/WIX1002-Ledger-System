@@ -12,32 +12,32 @@
         },
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.example.App.Main",
+            "projectName": "ledger_system",
+            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
             "name": "bank",
             "request": "launch",
-            "mainClass": "bank",
-            "projectName": "WIX1002-Ledger-System_b9207391"
+            "mainClass": "com.example.Original.bank",
+            "projectName": "ledger_system"
         },
         {
             "type": "java",
             "name": "jdbc_ledger_system",
             "request": "launch",
-            "mainClass": "jdbc_ledger_system",
-            "projectName": "WIX1002-Ledger-System_b9207391"
+            "mainClass": "com.example.Original.jdbc_ledger_system",
+            "projectName": "ledger_system"
         },
         {
             "type": "java",
             "name": "main",
             "request": "launch",
-            "mainClass": "main",
-            "projectName": "WIX1002-Ledger-System_b9207391"
-        },
-        {
-            "type": "java",
-            "name": "Main",
-            "request": "launch",
-            "mainClass": "ui.Main",
-            "projectName": "WIX1002-Ledger-System_b9207391",
-            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
+            "mainClass": "com.example.Original.main",
+            "projectName": "ledger_system"
         }
     ]
 }
