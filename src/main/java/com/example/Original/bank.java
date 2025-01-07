@@ -49,7 +49,6 @@ public class bank {
             System.out.println("5. Credit Loan");
             System.out.println("6. Deposit Interest Predictor");
             System.out.println("7. Logout");
-            System.out.println("8. Get Report");
 
             System.out.print("Choose an option : ");
 
@@ -91,7 +90,7 @@ public class bank {
                 case 7:
                     System.out.println("Logging Out");
                     break;
-                    
+
                 default:
                     System.out.println("Please enter a valid number");
             }
