@@ -11,7 +11,7 @@ import java.sql.SQLException;
             // Database connection parameters
             String url = "jdbc:mysql://localhost:3306/mydb";
             String username = "root";
-            String password = "cyh051205";
+            String password = "password";
     
             // SQL query to insert data
             String sql = "INSERT INTO employees (id, name, salary) VALUES (?, ?, ?)";
