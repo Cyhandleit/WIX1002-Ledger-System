@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "com.example.App.Main",
             "projectName": "ledger_system",
-            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path \"C:/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",

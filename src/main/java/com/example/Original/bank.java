@@ -1,9 +1,12 @@
 package com.example.Original;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
+
 
 public class bank {
 
@@ -46,6 +49,7 @@ public class bank {
             System.out.println("5. Credit Loan");
             System.out.println("6. Deposit Interest Predictor");
             System.out.println("7. Logout");
+            System.out.println("8. Get Report");
 
             System.out.print("Choose an option : ");
 
@@ -87,7 +91,7 @@ public class bank {
                 case 7:
                     System.out.println("Logging Out");
                     break;
-
+                    
                 default:
                     System.out.println("Please enter a valid number");
             }
@@ -186,6 +190,20 @@ public class bank {
         for (int i = 0; i < transHistory.size(); i++) {
             System.out.printf("%-15s %-15s %10.2f %10.2f\n",
                             dateHistory.get(i), transHistory.get(i), amountHistory.get(i),balanceHistory.get(i));
+        }
+
+        System.out.println("\nGet Report");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+        System.out.print("Choice : ");
+        int input = sc.nextInt();
+        sc.nextLine();
+
+        switch(input){
+            case 1: getReport();
+                    System.out.println("Report Generated Successfully");
+                    break;
+            default: break;
         }
     }
 
@@ -346,9 +364,7 @@ public class bank {
                     System.out.printf("%-15s %-15s %10.2f %10.2f\n",
                             dateHistory.get(i), loanRepaymentHistory.get(i), loanAmountHistory.get(i),
                             loanHistory.get(i));
-
                 }
-
                 break;
 
             case 4:
@@ -375,6 +391,30 @@ public class bank {
         System.out.printf("%-20s %15.2f\n", "Alliance", miAll);
         System.out.printf("%-20s %15.2f\n", "Ambank", miAB);
         System.out.printf("%-20s %15.2f\n", "Standard Chartered", miSC);
+    }
+
+    static void getReport(){
+        String timeStamp = new SimpleDateFormat("_ddMMyyyy_HHmm").format(Calendar.getInstance().getTime());
+
+        try {
+            String filename ="UserTransactionReport/" + data.name + timeStamp + ".csv";
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+
+            bw.write(data.name + "'s Transaction Report");
+            bw.write("\nDate,Description,Amount,Balance");
+            for (int i = 0; i < transHistory.size(); i++) {
+                String date = dateHistory.get(i);
+                String description = transHistory.get(i);
+                String amount = String.valueOf(amountHistory.get(i));
+                String balance = String.valueOf(balanceHistory.get(i));
+                bw.write("\n" + date + "," + description + "," + amount + "," + balance);
+            }
+
+            bw.close();
+        } catch (Exception e) {
+            System.out.println("Failed Generating a report");
+            
+        }
     }
 
 }
