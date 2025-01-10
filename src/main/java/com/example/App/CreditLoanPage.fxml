@@ -41,6 +41,7 @@
                               <Button fx:id="repayButton" mnemonicParsing="false" onAction="#repayLoan" text="Repay" />
                               <Label fx:id="statusLabel1" textFill="RED" />
                               <Button mnemonicParsing="false" onAction="#openLoanRepayments" text="View Loan Repayments" />
+                              <Label fx:id="remainingTimeLabel" text="Remaining Time: " textFill="BLUE" />
                            </children>
                         </VBox>
                      </children>

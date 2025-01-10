@@ -14,7 +14,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CreditLoanController {
 
@@ -33,12 +35,15 @@ public class CreditLoanController {
     @FXML
     private Label statusLabel;
     @FXML
+    private Label remainingTimeLabel;
+    @FXML
     private int userId; // Store the user ID of the logged-in user
 
     // Method to set the user ID (called from the MenuController)
     @FXML
     public void setUserId(int userId) {
         this.userId = userId;
+        updateRemainingTime();
     }
 
     @FXML
@@ -152,5 +157,38 @@ public class CreditLoanController {
 
     public boolean canPerformDebitOrCredit() {
         return !hasOutstandingLoan();
+    }
+
+    private void updateRemainingTime() {
+        try (Connection connection = ledgerDB.getConnection()) {
+            String query = "SELECT due_date FROM loans WHERE user_id = ? AND total_repayment > 0";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        LocalDateTime dueDate = rs.getTimestamp("due_date").toLocalDateTime();
+                        LocalDateTime now = LocalDateTime.now();
+                        Duration duration = Duration.between(now, dueDate);
+
+                        long days = duration.toDays();
+                        long hours = duration.toHours() % 24;
+                        long minutes = duration.toMinutes() % 60;
+
+                        if (days > 0) {
+                            remainingTimeLabel.setText(String.format("Remaining Time: %d days, %d hours, %d minutes", days, hours, minutes));
+                        } else if (hours > 0) {
+                            remainingTimeLabel.setText(String.format("Remaining Time: %d hours, %d minutes", hours, minutes));
+                        } else {
+                            remainingTimeLabel.setText(String.format("Remaining Time: %d minutes", minutes));
+                        }
+                    } else {
+                        remainingTimeLabel.setText("No active loans");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

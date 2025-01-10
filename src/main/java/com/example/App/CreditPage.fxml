@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -10,7 +11,7 @@
 
 <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.App.CreditController">
    <children>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
          <children>
             <BorderPane prefHeight="250.0" prefWidth="600.0">
                <top>
@@ -21,26 +22,29 @@
                   </Text>
                </top>
                <bottom>
-                  <Button fx:id="ConfirmButton" mnemonicParsing="false" onAction="#submit" text="Confirm" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Button>
+                  <Label fx:id="errorLabel" textFill="RED" BorderPane.alignment="CENTER">
+                     <graphic>
+                        <Button fx:id="ConfirmButton" mnemonicParsing="false" onAction="#submit" text="Confirm">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Button>
+                     </graphic></Label>
                </bottom>
                <center>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="244.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                      <children>
                         <Text layoutX="15.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the Amount">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Text>
+                        <TextField fx:id="CreditAmount" alignment="CENTER_RIGHT" layoutX="250.0" layoutY="30.0" onAction="#submit" promptText="00000.00" />
                         <Text layoutX="14.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the description">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="CreditAmount" alignment="CENTER_RIGHT" layoutX="250.0" layoutY="30.0" onAction="#submit" promptText="00000.00" />
                         <TextField fx:id="DescTextField" alignment="CENTER_RIGHT" layoutX="250.0" layoutY="92.0" onAction="#submit" promptText="Where's the money go?" />
                      </children>
                   </AnchorPane>

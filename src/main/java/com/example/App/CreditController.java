@@ -2,6 +2,7 @@ package com.example.App;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class CreditController {
@@ -10,7 +11,8 @@ public class CreditController {
     private TextField CreditAmount;
     @FXML
     private TextField DescTextField;
-
+    @FXML
+    private Label errorLabel;
     @FXML
     private int userId; // Store the user ID of the logged-in user
 
@@ -23,16 +25,24 @@ public class CreditController {
     @FXML
     private void submit(ActionEvent event) {
         if (TransactionUtils.hasOverdueLoan(userId)) {
-            System.err.println("Transaction denied: User has overdue loans.");
+            errorLabel.setText("Transaction denied: User has overdue loans.");
             return;
         }
 
         try {
             double credit = Double.parseDouble(CreditAmount.getText());
             String desc = DescTextField.getText();
+
+            if (credit <= 0) {
+                errorLabel.setText("Invalid credit amount: Amount must be positive.");
+                return;
+            }
+
             TransactionUtils.recordCreditTransaction(userId, credit, desc);
+            errorLabel.setText(""); // Clear error message on successful transaction
+
         } catch (NumberFormatException e) {
-            System.err.println("Invalid credit amount: " + e.getMessage());
+            errorLabel.setText("Invalid credit amount: " + e.getMessage());
         }
     }
 }

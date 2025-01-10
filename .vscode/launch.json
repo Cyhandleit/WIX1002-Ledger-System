@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CSVExporter",
+            "request": "launch",
+            "mainClass": "com.example.App.CSVExporter",
+            "projectName": "ledger_system"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

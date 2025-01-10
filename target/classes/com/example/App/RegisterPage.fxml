@@ -6,90 +6,112 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.Reflection?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 0.0% 25.6629% to 100.0% 100.0%, #00b8ff 0.0%, #ffffff 100.0%);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.App.RegisterController">
+<HBox alignment="CENTER" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(from 0.0% 25.6629% to 100.0% 100.0%, #00b8ff 0.0%, #ffffff 100.0%);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.App.RegisterController">
    <children>
-      <TextField fx:id="usernameField" layoutX="182.0" layoutY="130.0" prefHeight="26.0" prefWidth="251.0" promptText="Enter Username" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
-         <effect>
-            <ColorAdjust contrast="1.0" />
-         </effect></TextField>
-      <TextField fx:id="emailField" layoutX="182.0" layoutY="194.0" prefHeight="26.0" prefWidth="251.0" promptText="Enter Email" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
-         <effect>
-            <ColorAdjust contrast="1.0" />
-         </effect></TextField>
-      <PasswordField fx:id="passwordField" layoutX="182.0" layoutY="261.0" prefHeight="26.0" prefWidth="251.0" promptText="Enter Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
-         <effect>
-            <ColorAdjust contrast="1.0" />
-         </effect></PasswordField>
-      <PasswordField fx:id="confirmPasswordField" layoutX="182.0" layoutY="321.0" prefHeight="26.0" prefWidth="251.0" promptText="Confirm Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
-         <effect>
-            <ColorAdjust contrast="1.0" />
-         </effect>
-      </PasswordField>
-      <Label fx:id="statusLabel" layoutX="298.0" layoutY="80.0" prefHeight="28.0" prefWidth="296.0" textFill="RED">
-         <font>
-            <Font name="Arial Bold" size="12.0" />
-         </font></Label>
-      <Button layoutX="45.0" layoutY="47.0" mnemonicParsing="false" onAction="#switchToCoverPage" style="-fx-background-color: white; -fx-border-color: grey;" text="Back" />
-      <Button fx:id="RegisterButton" layoutX="278.0" layoutY="360.0" mnemonicParsing="false" onAction="#registerUser" style="-fx-background-color: #0598ff;" text="Register">
-         <textFill>
-            <LinearGradient endX="1.0" endY="1.0" startY="0.25662878787878807">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </textFill></Button>
-      <Text layoutX="166.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create an Account" textAlignment="CENTER" wrappingWidth="283.1999755859374">
-         <font>
-            <Font name="Segoe UI Bold Italic" size="30.0" />
-         </font>
-      </Text>
-      <Text layoutX="182.0" layoutY="117.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <effect>
-            <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
-         </effect>
-      </Text>
-      <Text layoutX="182.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <effect>
-            <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
-         </effect>
-      </Text>
-      <Text layoutX="184.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <effect>
-            <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
-         </effect>
-      </Text>
-      <Text layoutX="186.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <effect>
-            <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
-         </effect>
-      </Text>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <effect>
+                  <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
+               </effect>
+            </Text>
+            <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="251.0" promptText="Enter Username" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
+               <effect>
+                  <ColorAdjust contrast="1.0" />
+               </effect>
+            </TextField>
+            <Button fx:id="RegisterButton" mnemonicParsing="false" onAction="#registerUser" style="-fx-background-color: #0598ff;" text="Register">
+               <textFill>
+                  <LinearGradient endX="1.0" endY="1.0" startY="0.25662878787878807">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#switchToCoverPage" style="-fx-background-color: white; -fx-border-color: grey;" text="Back" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create an Account" textAlignment="CENTER" wrappingWidth="283.1999755859374">
+               <font>
+                  <Font name="Segoe UI Bold Italic" size="30.0" />
+               </font>
+            </Text>
+            <TextField fx:id="emailField" prefHeight="26.0" prefWidth="251.0" promptText="Enter Email" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
+               <effect>
+                  <ColorAdjust contrast="1.0" />
+               </effect>
+            </TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <effect>
+                  <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
+               </effect>
+            </Text>
+            <PasswordField fx:id="passwordField" prefHeight="26.0" prefWidth="251.0" promptText="Enter Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
+               <effect>
+                  <ColorAdjust contrast="1.0" />
+               </effect>
+            </PasswordField>
+            <Label fx:id="statusLabel" prefHeight="28.0" prefWidth="296.0" textFill="RED">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Label>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <effect>
+                  <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
+               </effect>
+            </Text>
+            <PasswordField fx:id="confirmPasswordField" prefHeight="26.0" prefWidth="251.0" promptText="Confirm Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;">
+               <effect>
+                  <ColorAdjust contrast="1.0" />
+               </effect>
+            </PasswordField>
+            <Text stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <effect>
+                  <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
+               </effect>
+            </Text>
+         </children>
+         <padding>
+            <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
+         </padding>
+         <Text text="Register" style="-fx-font-size: 24px;">
+            <font>
+               <Font name="System Bold" size="24.0" />
+            </font>
+            <effect>
+               <Reflection fraction="0.7" topOffset="1.0" topOpacity="0.4" />
+            </effect>
+         </Text>
+      </VBox>
    </children>
-</AnchorPane>
+</HBox>

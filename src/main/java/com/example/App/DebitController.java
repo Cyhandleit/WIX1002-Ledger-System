@@ -2,6 +2,7 @@ package com.example.App;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ public class DebitController {
     @FXML
     private TextField DescTextField;
     @FXML
+    private Label errorLabel;
+    @FXML
     private int userId; // Store the user ID of the logged-in user
 
     // Method to set the user ID (called from the MenuController)
@@ -26,13 +29,18 @@ public class DebitController {
     @FXML
     private void submit(ActionEvent event) {
         if (TransactionUtils.hasOverdueLoan(userId)) {
-            System.err.println("Transaction denied: User has overdue loans.");
+            errorLabel.setText("Transaction denied: User has overdue loans.");
             return;
         }
 
         try {
             double debit = Double.parseDouble(DebitAmount.getText());
             String desc = DescTextField.getText();
+
+            if (debit <= 0) {
+                errorLabel.setText("Invalid debit amount: Amount must be positive.");
+                return;
+            }
 
             // Get the savings percentage from the database
             double savingsPercentage = getSavingsPercentage(userId);
@@ -44,11 +52,13 @@ public class DebitController {
             // Record the transactions
             TransactionUtils.recordDebitTransaction(userId, balanceAmount, desc);
             updateSavings(userId, savingsAmount);
+            errorLabel.setText(""); // Clear error message on successful transaction
 
         } catch (NumberFormatException e) {
-            System.err.println("Invalid debit amount: " + e.getMessage());
+            errorLabel.setText("Invalid debit amount: " + e.getMessage());
         }
     }
+
 
     private double getSavingsPercentage(int userId) {
         double percentage = 0.0;
