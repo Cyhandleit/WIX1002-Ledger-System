@@ -52,48 +52,55 @@ public class RegisterController {
         String email = emailField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-
+    
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             statusLabel.setText("Please fill in all fields.");
             return;
         }
-
+    
         if (!isValidUsername(username)) {
             statusLabel.setText("Username must be alphanumeric and cannot contain special characters.");
             return;
         }
-
+    
         if (!isValidEmail(email)) {
             statusLabel.setText("Invalid email format!");
             return;
         }
-
+    
         if (!isValidPassword(password)) {
             statusLabel.setText("Password must be at least 8 characters long and contain at least one special character.");
             return;
         }
-
+    
         if (!password.equals(confirmPassword)) {
             statusLabel.setText("Passwords do not match.");
             return;
         }
-
+    
         try (Connection connection = ledgerDB.getConnection()) {
             String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, username);
-                stmt.setString(2, email);
-                stmt.setString(3, password);
-                stmt.executeUpdate();
-            }
-
+            stmt.setString(1, username);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.executeUpdate();
+         }
+    
             // Initialize account with default values
             initializeAccount(connection, username);
 
             statusLabel.setText("Registration successful!");
             switchToCoverPage(event);
 
-        } catch (SQLException | IOException e) {
+         } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) { // Duplicate entry error code for MySQL
+                statusLabel.setText("Username or email already exists.");
+            } else {
+                statusLabel.setText("Registration failed: " + e.getMessage());
+            }
+            e.printStackTrace();
+        } catch (IOException e) {
             statusLabel.setText("Registration failed: " + e.getMessage());
             e.printStackTrace();
         }
