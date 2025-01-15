@@ -1,4 +1,6 @@
-USE mydb;
+USE freedb_LedgerDB;
+
+DROP TABLES accounts, users, savings, transactions, loans;
 
 -- Table for users
 CREATE TABLE IF NOT EXISTS users (
