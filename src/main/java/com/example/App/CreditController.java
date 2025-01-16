@@ -14,6 +14,8 @@ public class CreditController {
     @FXML
     private Label errorLabel;
     @FXML
+    private Label transactionStatusLabel;
+    @FXML
     private int userId; // Store the user ID of the logged-in user
 
     // Method to set the user ID (called from the MenuController)
@@ -26,6 +28,7 @@ public class CreditController {
     private void submit(ActionEvent event) {
         if (TransactionUtils.hasOverdueLoan(userId)) {
             errorLabel.setText("Transaction denied: User has overdue loans.");
+            transactionStatusLabel.setText("Transaction failed: Overdue loans.");
             return;
         }
 
@@ -35,14 +38,17 @@ public class CreditController {
 
             if (credit <= 0) {
                 errorLabel.setText("Invalid credit amount: Amount must be positive.");
+                transactionStatusLabel.setText("Transaction failed: Invalid amount.");
                 return;
             }
 
             TransactionUtils.recordCreditTransaction(userId, credit, desc);
             errorLabel.setText(""); // Clear error message on successful transaction
+            transactionStatusLabel.setText("Transaction successful!");
 
         } catch (NumberFormatException e) {
             errorLabel.setText("Invalid credit amount: " + e.getMessage());
+            transactionStatusLabel.setText("Transaction failed: Invalid input.");
         }
     }
 }

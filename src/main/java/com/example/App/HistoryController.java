@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -17,6 +16,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class HistoryController implements Initializable {
 
@@ -175,6 +178,43 @@ public class HistoryController implements Initializable {
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void exportCSV() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(transactionTable.getScene().getWindow());
+
+        if (file != null) {
+            try (Connection connection = ledgerDB.getConnection();
+                 PreparedStatement stmt = connection.prepareStatement("SELECT date, time, description, amount FROM transactions WHERE user_id = ?")) {
+                stmt.setInt(1, userId);
+                try (ResultSet rs = stmt.executeQuery();
+                     FileWriter fileWriter = new FileWriter(file)) {
+
+                    // Write header
+                    fileWriter.append("Date,Time,Description,Debit,Credit,Balance\n");
+
+                    // Write data
+                    double runningBalance = 0.0;
+                    while (rs.next()) {
+                        String date = rs.getString("date");
+                        String time = rs.getString("time");
+                        String description = rs.getString("description");
+                        double amount = rs.getDouble("amount");
+                        double debit = amount > 0 ? amount : 0;
+                        double credit = amount < 0 ? -amount : 0;
+                        runningBalance += amount;
+
+                        fileWriter.append(String.format("%s,%s,%s,%.2f,%.2f,%.2f\n", date, time, description, debit, credit, runningBalance));
+                    }
+                }
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

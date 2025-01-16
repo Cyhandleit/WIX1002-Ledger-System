@@ -18,6 +18,8 @@ public class DebitController {
     @FXML
     private Label errorLabel;
     @FXML
+    private Label transactionStatusLabel;
+    @FXML
     private int userId; // Store the user ID of the logged-in user
 
     // Method to set the user ID (called from the MenuController)
@@ -30,6 +32,7 @@ public class DebitController {
     private void submit(ActionEvent event) {
         if (TransactionUtils.hasOverdueLoan(userId)) {
             errorLabel.setText("Transaction denied: User has overdue loans.");
+            transactionStatusLabel.setText("Transaction failed: Overdue loans.");
             return;
         }
 
@@ -39,6 +42,7 @@ public class DebitController {
 
             if (debit <= 0) {
                 errorLabel.setText("Invalid debit amount: Amount must be positive.");
+                transactionStatusLabel.setText("Transaction failed: Invalid amount.");
                 return;
             }
 
@@ -53,12 +57,13 @@ public class DebitController {
             TransactionUtils.recordDebitTransaction(userId, balanceAmount, desc);
             updateSavings(userId, savingsAmount);
             errorLabel.setText(""); // Clear error message on successful transaction
+            transactionStatusLabel.setText("Transaction successful!");
 
         } catch (NumberFormatException e) {
             errorLabel.setText("Invalid debit amount: " + e.getMessage());
+            transactionStatusLabel.setText("Transaction failed: Invalid input.");
         }
     }
-
 
     private double getSavingsPercentage(int userId) {
         double percentage = 0.0;

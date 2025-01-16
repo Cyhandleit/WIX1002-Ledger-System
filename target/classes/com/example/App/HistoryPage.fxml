@@ -57,6 +57,7 @@
                               <TextField fx:id="maxAmountField" promptText="Max Amount" />
                               <ComboBox fx:id="sortComboBox" promptText="Sort By" />
                               <Button mnemonicParsing="false" onAction="#applyFiltersAndSort" text="Apply" />
+                              <Button mnemonicParsing="false" onAction="#exportCSV" text="Export CSV" />
                            </HBox>
                         </VBox>
                      </children>
